@@ -11,16 +11,28 @@ export const ActivityStoreModel = types
   .actions(withSetPropAction)
   .actions((store) => ({
     createNewActivity(workout: string) {
+      console.log("Creating workrout!")
       const activity = ActivityModel.create({
         workout: workout,
-        date: new Date().getMilliseconds().toString()
+        creation_date: Date.now(),
+        id: Date.now()
       })
+      console.log(activity)
       store.log.push(activity)
     },
+    completeActivity(activity: Activity, comment: string) {
+        if (store.log.includes(activity)) {
+            activity.completion_date = Date.now()
+            activity.feedback = comment
+        }
+    },
+    removeAll() {
+        store.log.clear()
+    }
   }))
   .views((store) => ({
     get listOfActivities() {
-      return store.log
+        return store.log
     },
   }))
   .actions((store) => ({

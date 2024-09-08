@@ -8,11 +8,9 @@ import { act } from "@testing-library/react-native"
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Markdown from 'react-native-markdown-display';
 
-// API key = AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ
-
 
 async function GenerateTraining(history: string, goals:string , activities: Array<string>, preferences: string) {
-  const genAI = new GoogleGenerativeAI("AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ");
+  const genAI = new GoogleGenerativeAI("");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   let prompt = []
@@ -66,7 +64,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
       const [confirmationMessage, setConfirmationMessage] = React.useState('');
       const [preferencesValue, setPreferences] = React.useState('');
       const [trainingValue, setTraining] = React.useState('');
-
+      
     return (
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
         <Text preset="heading" style={$title}>Let's get some training in!</Text>

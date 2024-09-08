@@ -7,8 +7,11 @@ import { withSetPropAction } from "./helpers/withSetPropAction"
 export const ActivityModel = types
   .model("Activity")
   .props({
-    date: '', // Ex: 2022-08-12 21:05:36
-    workout: ""
+    id: 0,
+    creation_date: 0,
+    completion_date: 0,
+    workout: "",
+    feedback: "",    
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

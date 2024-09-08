@@ -1,168 +1,347 @@
-import React, { FC } from "react"
-import { ImageStyle, TextStyle, View, ViewStyle, TextInput, Button, StyleSheet } from "react-native"
-import { Screen, Text } from "../components"
-import { DemoTabScreenProps } from "../navigators/DemoNavigator"
-import { spacing } from "../theme"
+import { observer } from "mobx-react-lite"
+import React, { ComponentType, FC, useEffect, useMemo } from "react"
+import {
+  AccessibilityProps,
+  ActivityIndicator,
+  Image,
+  ImageSourcePropType,
+  ImageStyle,
+  Platform,
+  StyleSheet,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
+import { type ContentStyle } from "@shopify/flash-list"
+import Animated, {
+  Extrapolate,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated"
+import {
+  Button,
+  ButtonAccessoryProps,
+  Card,
+  EmptyState,
+  Icon,
+  ListView,
+  Screen,
+  Text,
+  Toggle,
+} from "../components"
+import { isRTL, translate } from "../i18n"
 import { useStores } from "../models"
-import { act } from "@testing-library/react-native"
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Activity } from "../models/Activity"
+import { DemoTabScreenProps } from "../navigators/DemoNavigator"
+import { colors, spacing } from "../theme"
+import { delay } from "../utils/delay"
+import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 import Markdown from 'react-native-markdown-display';
 
-// API key = AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ
 
 
-async function GenerateTraining(history: string, goals:string , activities: Array<string>, preferences: string) {
-  const genAI = new GoogleGenerativeAI("AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ");
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const ICON_SIZE = 14
 
-  let prompt = []
+const rnrImage1 = require("../../assets/images/demo/rnr-image-1.png")
+const rnrImage2 = require("../../assets/images/demo/rnr-image-2.png")
+const rnrImage3 = require("../../assets/images/demo/rnr-image-3.png")
+const rnrImages = [rnrImage1, rnrImage2, rnrImage3]
 
-  const intro = "You're a climbing coach; you should help a rock climber who's trying to improve his climbing skills."
-  prompt.push(intro)
-  const context = "This is the context of the climber:  " + history
-  prompt.push(context)
-  const what_to_achieve = "This is what the climber is trying to achieve now: " + goals 
-  prompt.push(what_to_achieve)
-  
-  if (activities.length > 0) {
-    let recent_activities_list = []
-
-    recent_activities_list.push("These are the last workouts the climber has performed:")
-    for (const activity of activities) {
-      recent_activities_list.push(activity)
-    }
-    prompt.push(recent_activities_list.join("\n"))
-  } else {
-    prompt.push("In terms of last workouts, the climber has not done much in the last days.")
-    prompt.push("Take that into consideration when suggestion a workout: perhaps the climber needs a ramp-up phase.")
-  }
-
-  if (preferences) {
-    prompt.push("For today, these are the preferences of the climber: " + preferences)
-    prompt.push("You should respect the preferences of the climber, especially if they talk abou time.")
-  }
-  
-  const target = `Please suggest a workout for the climber to do today.
-  The workout should be aligned with the goal of the climber, the history, and what was mentioned in the last two workouts.
-  You should only provide the workout plan, and no other information, introduction, etc. Please do not talk about the climber's history.
-
-  When talking about lead climbing, use the French lead climbing grading system (6a, 6b, 7c+ etc). When talking about bouldering,
-  use the french bouldering grading system (6A, 6B, 8B+).
-  `
-  prompt.push(target)
-  const final_prompt = prompt.join("\n")
-
-  console.log(final_prompt)
-
-  const result = await model.generateContent(final_prompt);
-  console.log(result.response.text());
-  return result.response.text(); 
-}
 
 export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
   function HistoryScreen(_props) {
-      const { userBioStore, activityStore } = useStores()
+      const { activityStore } = useStores()
 
-      const [confirmationMessage, setConfirmationMessage] = React.useState('');
-      const [preferencesValue, setPreferences] = React.useState('');
-      const [trainingValue, setTraining] = React.useState('');
+      const [refreshing, setRefreshing] = React.useState(false)
 
-    return (
-      <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
-        <Text preset="heading" style={$title}>Let's get some training in!</Text>
+    // simulate a longer refresh, if the refresh is too fast for UX
+    async function manualRefresh() {
+      setRefreshing(true)
+      await Promise.all([activityStore.listOfActivities, delay(750)])
+      setRefreshing(false)
+    }
 
-        <Text style={{marginTop: 20, marginBottom: 10}}>Any preferences for today? Just type them below, then click "Suggest training"</Text>
-        <TextInput
-          multiline={true}
-          numberOfLines={4}
-          onChangeText={setPreferences}
-          value={preferencesValue}
-          style={{ height: 75, backgroundColor: '#E8F0FE', padding: 10  }}
-          placeholder={"Enter your preferences here for example: I do not have a lot of time, just give me some ideas for fingerboarding at home"}
-        />
+      return (
+        <Screen
+          preset="fixed"
+          safeAreaEdges={["top"]}
+          contentContainerStyle={$screenContentContainer}
+        >
 
+        <Text>{activityStore.log.length}</Text>
         <View style={{margin: 10}}>
           <Button
-            title="Suggest training"
+            title="Delete all trainings"
             onPress={async () => {
-              setTraining('')
-              setConfirmationMessage("Generating training ...")
-              const activities = activityStore.listOfActivities;
-              const training  = await GenerateTraining(
-                userBioStore.bioInfo.history,
-                userBioStore.bioInfo.goals,
-                activities, preferencesValue);
-              setConfirmationMessage("")                
-              setTraining(training);
+              activityStore.removeAll()
             }}
           />
 
-      </View>
-
-      <View>
-        <Text>{confirmationMessage}</Text>
-      </View>
-
-
-      <View>
-        <Markdown>{trainingValue}</Markdown>
-        {trainingValue ? (
-          <>
-          <View style={{margin: 10}}>
-            <Button title="Accept training"
-            
-            onPress={async () => {
-              activityStore.createNewActivity(trainingValue)
-              setTraining('')
-              setConfirmationMessage("Training accepted for today")
-              console.log(activityStore)
-            }}            
-            >
-            </Button>
-          </View>            
-          </>) : <></>}        
-      </View>
+        </View>
+          <ListView<Activity>
+            contentContainerStyle={$listContentContainer}
+            data={activityStore.listOfActivities.slice()}
+            refreshing={refreshing}
+            estimatedItemSize={177}
+            onRefresh={manualRefresh}
+            ListHeaderComponent={
+              <View style={$heading}>
+                <Text preset="heading">Your training log</Text>
+              </View>
+            }
+            renderItem={({ item }) => (
+              <WorkoutCard
+                workout={item}
+              />
+            )}
+          />
 
 
-      </Screen>
-    )
+        </Screen>
+      )
   }
 
-const $container: ViewStyle = {
-  paddingTop: spacing.lg + spacing.xl,
+  const WorkoutCard = observer(function WorkoutCard({
+    workout,
+    // isFavorite,
+    // onPressFavorite,
+  }: {
+    workout: Activity
+
+  }) {
+ 
+    const imageUri = useMemo<ImageSourcePropType>(() => {
+      return rnrImages[Math.floor(Math.random() * rnrImages.length)]
+    }, [])
+  
+
+  const liked = useSharedValue(1)
+
+  // Grey heart
+  const animatedLikeButtonStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: interpolate(liked.value, [0, 1], [1, 0], Extrapolate.EXTEND),
+        },
+      ],
+      opacity: interpolate(liked.value, [0, 1], [1, 0], Extrapolate.CLAMP),
+    }
+  })
+
+  // Pink heart
+  const animatedUnlikeButtonStyles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: liked.value,
+        },
+      ],
+      opacity: liked.value,
+    }
+  })
+
+
+    /**
+     * Android has a "longpress" accessibility action. iOS does not, so we just have to use a hint.
+     * @see https://reactnative.dev/docs/accessibility#accessibilityactions
+     */
+    const accessibilityHintProps = useMemo(
+      () =>
+        Platform.select<AccessibilityProps>({
+          ios: {
+            accessibilityLabel: "title goes here",
+            accessibilityHint: translate("demoPodcastListScreen.accessibility.cardHint", {
+              // action: isFavorite ? "unfavorite" : "favorite",
+            }),
+          },
+          android: {
+            accessibilityLabel: "title goes here",
+            accessibilityActions: [
+              {
+                name: "longpress",
+                label: translate("demoPodcastListScreen.accessibility.favoriteAction"),
+              },
+            ],
+            onAccessibilityAction: ({ nativeEvent }) => {
+              if (nativeEvent.actionName === "longpress") {
+                handlePressFavorite()
+              }
+            },
+          },
+        }),
+      [workout],
+    )
+  
+    const handlePressFavorite = () => {
+
+    }
+  
+    const handlePressCard = () => {
+    }
+  
+    const ButtonLeftAccessory: ComponentType<ButtonAccessoryProps> = useMemo(
+      () =>
+        function ButtonLeftAccessory() {
+          return (
+            <View>
+              <Animated.View
+                style={[$iconContainer, StyleSheet.absoluteFill, animatedLikeButtonStyles]}
+              >
+                <Icon
+                  icon="heart"
+                  size={ICON_SIZE}
+                  color={colors.palette.neutral800} // dark grey
+                />
+              </Animated.View>
+              <Animated.View style={[$iconContainer, animatedUnlikeButtonStyles]}>
+                <Icon
+                  icon="heart"
+                  size={ICON_SIZE}
+                  color={colors.palette.primary400} // pink
+                />
+              </Animated.View>
+            </View>
+          )
+        },
+      [],
+    )
+
+    console.log(workout)
+
+    const creation_date = new Date(workout.creation_date);
+    const formatted_creation_date = creation_date.toLocaleDateString();
+
+    let completed = "Not completed yet"
+    if (workout.completion_date > 0) {
+      completed = "Completed on " + new Date(workout.completion_date).toLocaleDateString()
+    }
+  
+    return (
+      <Card
+        style={$item}
+        verticalAlignment="force-footer-bottom"
+        onPress={handlePressCard}
+        onLongPress={handlePressFavorite}
+        HeadingComponent={
+          <View style={$metadata}>
+            <Text
+              style={$metadataText}
+              size="xxs"
+              accessibilityLabel={"whatever"}
+            >
+              {formatted_creation_date}
+            </Text>
+            <Text
+              style={$metadataText}
+              size="xxs"
+              accessibilityLabel={"whatever"}
+            >
+              {completed}
+            </Text>
+          </View>
+        }
+        //content={`${workout.workout}`}
+        {...accessibilityHintProps}
+        RightComponent={<Image source={imageUri} style={$itemThumbnail} />}
+        FooterComponent={
+          <Button
+            onPress={handlePressFavorite}
+            onLongPress={handlePressFavorite}
+            style={[$favoriteButton, true && $unFavoriteButton]}
+            accessibilityLabel={
+              true
+                ? translate("demoPodcastListScreen.accessibility.unfavoriteIcon")
+                : translate("demoPodcastListScreen.accessibility.favoriteIcon")
+            }
+            LeftAccessory={ButtonLeftAccessory}
+          >
+          </Button>
+        }
+      />
+    )
+  })
+
+
+// #region Styles
+const $screenContentContainer: ViewStyle = {
+  flex: 1,
+}
+
+const $listContentContainer: ContentStyle = {
   paddingHorizontal: spacing.lg,
+  paddingTop: spacing.lg + spacing.xl,
+  paddingBottom: spacing.lg,
 }
 
-const $title: TextStyle = {
-  marginBottom: spacing.sm,
+const $heading: ViewStyle = {
+  marginBottom: spacing.md,
 }
 
-const $tagline: TextStyle = {
-  marginBottom: spacing.xxl,
+const $item: ViewStyle = {
+  padding: spacing.md,
+  marginTop: spacing.md,
+  minHeight: 120,
 }
 
-const $description: TextStyle = {
-  marginBottom: spacing.lg,
+const $itemThumbnail: ImageStyle = {
+  marginTop: spacing.sm,
+  borderRadius: 50,
+  alignSelf: "flex-start",
 }
 
-const $sectionTitle: TextStyle = {
+const $toggle: ViewStyle = {
+  marginTop: spacing.md,
+}
+
+const $labelStyle: TextStyle = {
+  textAlign: "left",
+}
+
+const $iconContainer: ViewStyle = {
+  height: ICON_SIZE,
+  width: ICON_SIZE,
+  flexDirection: "row",
+  marginEnd: spacing.sm,
+}
+
+const $metadata: TextStyle = {
+  color: colors.textDim,
+  marginTop: spacing.xs,
+  flexDirection: "row",
+}
+
+const $metadataText: TextStyle = {
+  color: colors.textDim,
+  marginEnd: spacing.md,
+  marginBottom: spacing.xs,
+}
+
+const $favoriteButton: ViewStyle = {
+  borderRadius: 17,
+  marginTop: spacing.md,
+  justifyContent: "flex-start",
+  backgroundColor: colors.palette.neutral300,
+  borderColor: colors.palette.neutral300,
+  paddingHorizontal: spacing.md,
+  paddingTop: spacing.xxxs,
+  paddingBottom: 0,
+  minHeight: 32,
+  alignSelf: "flex-start",
+}
+
+const $unFavoriteButton: ViewStyle = {
+  borderColor: colors.palette.primary100,
+  backgroundColor: colors.palette.primary100,
+}
+
+const $emptyState: ViewStyle = {
   marginTop: spacing.xxl,
 }
 
-const $logoContainer: ViewStyle = {
-  marginEnd: spacing.md,
-  flexDirection: "row",
-  flexWrap: "wrap",
-  alignContent: "center",
-  alignSelf: "stretch",
+const $emptyStateImage: ImageStyle = {
+  transform: [{ scaleX: isRTL ? -1 : 1 }],
 }
-
-const $logo: ImageStyle = {
-  height: 38,
-  width: 38,
-}
-
-const buttonStyle: ViewStyle = {
-    marginTop: 20,
-    backgroundColor: 'blue',
-}
+// #endregion

@@ -23,7 +23,7 @@ import Animated, {
 import { colors, spacing } from "../theme"
 import { iconRegistry, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
-import { isRTL } from "app/i18n"
+import { isRTL } from "../i18n"
 
 type Variants = "checkbox" | "switch" | "radio"
 

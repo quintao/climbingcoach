@@ -108,29 +108,3 @@ const $title: TextStyle = {
 const $tagline: TextStyle = {
   marginBottom: spacing.xxl,
 }
-
-const $description: TextStyle = {
-  marginBottom: spacing.lg,
-}
-
-const $sectionTitle: TextStyle = {
-  marginTop: spacing.xxl,
-}
-
-const $logoContainer: ViewStyle = {
-  marginEnd: spacing.md,
-  flexDirection: "row",
-  flexWrap: "wrap",
-  alignContent: "center",
-  alignSelf: "stretch",
-}
-
-const $logo: ImageStyle = {
-  height: 38,
-  width: 38,
-}
-
-const buttonStyle: ViewStyle = {
-    marginTop: 20,
-    backgroundColor: 'blue',
-}

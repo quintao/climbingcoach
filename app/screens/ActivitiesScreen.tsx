@@ -42,7 +42,6 @@ async function GenerateTraining(history: string, goals: string, injuries: string
   const what_to_achieve = "These are the goals that the climber is trying to achieve now, using their own words: " + goals 
   prompt.push(what_to_achieve)
   
-  const now = Date.now()
   const seven_days_ago = Date.now() - 7 * 24 * 60 * 60
 
   if (activities.length > 0) {
@@ -207,34 +206,4 @@ const $container: ViewStyle = {
 
 const $title: TextStyle = {
   marginBottom: spacing.sm,
-}
-
-const $tagline: TextStyle = {
-  marginBottom: spacing.xxl,
-}
-
-const $description: TextStyle = {
-  marginBottom: spacing.lg,
-}
-
-const $sectionTitle: TextStyle = {
-  marginTop: spacing.xxl,
-}
-
-const $logoContainer: ViewStyle = {
-  marginEnd: spacing.md,
-  flexDirection: "row",
-  flexWrap: "wrap",
-  alignContent: "center",
-  alignSelf: "stretch",
-}
-
-const $logo: ImageStyle = {
-  height: 38,
-  width: 38,
-}
-
-const buttonStyle: ViewStyle = {
-    marginTop: 20,
-    backgroundColor: 'blue',
 }

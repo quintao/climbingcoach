@@ -12,15 +12,9 @@ import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 import { Markup } from 'react-render-markup';
 
 export type DemoTabParamList = {
-  DemoCommunity: undefined
-  DemoShowroom: { queryIndex?: string; itemIndex?: string }
-  DemoDebug: undefined
-  DemoPodcastList: undefined
   DemoSettings: undefined
   DemoActivities: undefined
-  DemoHistory: undefined
-
-}
+  DemoHistory: undefined}
 
 /**
  * Helper for automatically generating navigation prop types for each route.

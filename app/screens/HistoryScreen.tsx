@@ -87,7 +87,6 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
           contentContainerStyle={$screenContentContainer}
         >
 
-        <Text>{activityStore.log.length}</Text>
         <View style={{margin: 10}}>
           <Button
             title="Delete all trainings"

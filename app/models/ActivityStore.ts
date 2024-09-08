@@ -1,7 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { Activity, ActivityModel } from "./Activity"
 import { withSetPropAction } from "./helpers/withSetPropAction"
-import { act } from "@testing-library/react-native"
 
 export const ActivityStoreModel = types
   .model("ActivityStore")

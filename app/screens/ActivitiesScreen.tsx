@@ -84,9 +84,28 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
       const { userBioStore, activityStore } = useStores()
 
       const [confirmationMessage, setConfirmationMessage] = React.useState('');
+
+      const handleConfirmationMessageChange = (text: string) => {
+        setConfirmationMessage(text);
+      };
+
       const [preferencesValue, setPreferences] = React.useState('');
+
+      const handlePreferencesChange = (text: string) => {
+        setPreferences(text);
+      };
+
       const [trainingValue, setTraining] = React.useState('');
+
+      const handleTrainingChange = (text: string) => {
+        setTraining(text);
+      };
+
       const [feedbackValue, setFeedback] = React.useState('');
+
+      const handleFeedbackChange = (text: string) => {
+        setFeedback(text);
+      };
 
     if (activityStore.current.id > 0) {
       return(
@@ -102,7 +121,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
         <TextInput
           multiline={true}
           numberOfLines={4}
-          onChangeText={setFeedback}
+          onChangeText={handleFeedbackChange}
           value={feedbackValue}
           style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
           placeholder={"Add your feedback here"}
@@ -114,7 +133,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
             title="Mark as completed"
             onPress={async () => {
               activityStore.completeActivity(feedbackValue)
-              setFeedback('')
+              handleFeedbackChange('')
             }}
           />
         </View>        
@@ -130,7 +149,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
         <TextInput
           multiline={true}
           numberOfLines={4}
-          onChangeText={setPreferences}
+          onChangeText={handlePreferencesChange}
           value={preferencesValue}
           style={{ height: 75, backgroundColor: '#E8F0FE', padding: 10  }}
           placeholder={"Enter your preferences here for example: I do not have a lot of time, just give me some ideas for fingerboarding at home"}
@@ -140,16 +159,16 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           <Button
             title="Suggest training"
             onPress={async () => {
-              setTraining('')
-              setConfirmationMessage("Generating training ...")
+              handleTrainingChange('')
+              handleConfirmationMessageChange("Generating training ...")
               const activities = activityStore.listOfActivities;
               const training  = await GenerateTraining(
                 userBioStore.bioInfo.history,
                 userBioStore.bioInfo.goals,
                 userBioStore.bioInfo.injuries,
                 activities, preferencesValue);
-              setConfirmationMessage("")                
-              setTraining(training);
+                handleConfirmationMessageChange("")                
+                handleTrainingChange(training);
             }}
           />
         </View>

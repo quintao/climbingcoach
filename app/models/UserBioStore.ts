@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { UserBio, UserBioModel } from "./UserBio"
+import { UserBioModel } from "./UserBio"
 import { withSetPropAction } from "./helpers/withSetPropAction"
 
 export const UserBioStoreModel = types

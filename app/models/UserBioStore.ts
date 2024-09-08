@@ -15,9 +15,13 @@ export const UserBioStoreModel = types
     setGoals(goals: string) {
       store.bio.goals = goals
     },
+    setInjuries(injuries: string) {
+        store.bio.injuries = injuries
+    },
     clearBio() {
         this.setHistory('')
         this.setGoals('')
+        this.setInjuries('')
     },
   }))
   .views((store) => ({

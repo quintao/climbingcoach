@@ -8,7 +8,8 @@ export const UserBioModel = types
   .model("UserBio")
   .props({
     history: "",
-    goals: ""
+    goals: "",
+    injuries: ""
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

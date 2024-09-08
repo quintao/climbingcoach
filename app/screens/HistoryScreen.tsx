@@ -11,6 +11,7 @@ import {
   TextStyle,
   View,
   ViewStyle,
+  TouchableOpacity
 } from "react-native"
 import { type ContentStyle } from "@shopify/flash-list"
 import Animated, {
@@ -67,15 +68,6 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
       setRefreshing(false)
     }
 
-
-    if (activityStore.log.length <= 0) {
-      return(
-        <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
-          <Text>You do not have any activities.</Text>
-        </Screen>
-      )
-    }
-
     let data = activityStore.listOfActivities.slice()
     data.sort((a, b) => b.creation_date - a.creation_date);
 
@@ -87,15 +79,6 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
           contentContainerStyle={$screenContentContainer}
         >
 
-        <View style={{margin: 10}}>
-          <Button
-            title="Delete all trainings"
-            onPress={async () => {
-              activityStore.removeAll()
-            }}
-          />
-
-        </View>
           <ListView<Activity>
             contentContainerStyle={$listContentContainer}
             data={data}
@@ -104,7 +87,12 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
             onRefresh={manualRefresh}
             ListHeaderComponent={
               <View style={$heading}>
-                <Text preset="heading">Your training log</Text>
+                <View>
+                  <Text preset="heading">Your training log</Text>
+                </View>
+                <View>
+                  <Text>{data.length == 0 ? 'You do not have any activities' : ''}</Text>
+                </View>
               </View>
             }
             renderItem={({ item }) => (
@@ -114,8 +102,20 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
 
               />
             )}
+            ListFooterComponent={
+              <View style={{margin: 10}}>
+              {data.length > 0 &&
+                <TouchableOpacity
+                  onPress={async () => {
+                    activityStore.removeAll()
+                  }}
+                >
+                <Text>Delete all</Text>
+              </TouchableOpacity>
+              }
+            </View>
+            }
           />
-
 
         </Screen>
       )
@@ -277,12 +277,6 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
 
 
 
-const $container: ViewStyle = {
-    paddingTop: spacing.lg + spacing.xl,
-    paddingHorizontal: spacing.lg,
-}
-
-// #region Styles
 const $screenContentContainer: ViewStyle = {
   flex: 1,
 }
@@ -309,14 +303,6 @@ const $itemThumbnail: ImageStyle = {
   alignSelf: "flex-start",
 }
 
-const $toggle: ViewStyle = {
-  marginTop: spacing.md,
-}
-
-const $labelStyle: TextStyle = {
-  textAlign: "left",
-}
-
 const $iconContainer: ViewStyle = {
   height: ICON_SIZE,
   width: ICON_SIZE,
@@ -336,29 +322,5 @@ const $metadataText: TextStyle = {
   marginBottom: spacing.xs,
 }
 
-const $favoriteButton: ViewStyle = {
-  borderRadius: 17,
-  marginTop: spacing.md,
-  justifyContent: "flex-start",
-  backgroundColor: colors.palette.neutral300,
-  borderColor: colors.palette.neutral300,
-  paddingHorizontal: spacing.md,
-  paddingTop: spacing.xxxs,
-  paddingBottom: 0,
-  minHeight: 32,
-  alignSelf: "flex-start",
-}
 
-const $unFavoriteButton: ViewStyle = {
-  borderColor: colors.palette.primary100,
-  backgroundColor: colors.palette.primary100,
-}
-
-const $emptyState: ViewStyle = {
-  marginTop: spacing.xxl,
-}
-
-const $emptyStateImage: ImageStyle = {
-  transform: [{ scaleX: isRTL ? -1 : 1 }],
-}
 // #endregion

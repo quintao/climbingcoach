@@ -24,6 +24,13 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
       };
 
 
+      const [injuriesValue, setInjuriesValue] = React.useState(userBioStore.bio.injuries);
+
+      const handleInjuriesValue = (text: string) => {
+        setInjuriesValue(text);
+      };
+
+
       const [confirmationMessage, setConfirmationMessage] = React.useState('');
 
 
@@ -50,7 +57,19 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
           placeholder={userBioStore.bioInfo.goals? userBioStore.bioInfo.goals : "Enter your goals here"}
 
-        /> 
+        />
+
+        <Text style={{marginTop: 20, marginBottom: 10}}>Injuries and/or health concerns</Text>
+        <TextInput
+          multiline={true}
+          numberOfLines={4}
+          onChangeText={handleInjuriesValue}
+          value={injuriesValue}
+          style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
+          placeholder={userBioStore.bioInfo.injuries? userBioStore.bioInfo.injuries : "Enter information about injuries or relevant health information"}
+n
+        />         
+
 
       <View style={{margin: 10}}>
         <Button
@@ -58,6 +77,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           onPress={() => {
             userBioStore.setHistory(historyValue)
             userBioStore.setGoals(goalsValue)
+            userBioStore.setInjuries(injuriesValue)
             setConfirmationMessage("Information saved")
 
             // Clear the message after 2 seconds

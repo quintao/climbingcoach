@@ -5,10 +5,11 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
-import { SettingsScreen, DemoShowroomScreen, DemoDebugScreen } from "../screens"
+import { SettingsScreen, DemoDebugScreen, ActivitiesScreen, HistoryScreen } from "../screens"
 import { DemoPodcastListScreen } from "../screens/DemoPodcastListScreen"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
+import { Markup } from 'react-render-markup';
 
 export type DemoTabParamList = {
   DemoCommunity: undefined
@@ -16,6 +17,8 @@ export type DemoTabParamList = {
   DemoDebug: undefined
   DemoPodcastList: undefined
   DemoSettings: undefined
+  DemoActivities: undefined
+  DemoHistory: undefined
 }
 
 /**
@@ -64,27 +67,29 @@ export function DemoNavigator() {
       />
 
       <Tab.Screen
-        name="DemoPodcastList"
-        component={DemoPodcastListScreen}
+        name="DemoActivities"
+        component={ActivitiesScreen}
         options={{
-          tabBarAccessibilityLabel: translate("demoNavigator.podcastListTab"),
-          tabBarLabel: translate("demoNavigator.podcastListTab"),
+          tabBarLabel: "Training plans",
           tabBarIcon: ({ focused }) => (
-            <Icon icon="podcast" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="community" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
-      />
+      />     
 
-      <Tab.Screen
-        name="DemoDebug"
-        component={DemoDebugScreen}
+    <Tab.Screen
+        name="DemoHistory"
+        component={HistoryScreen}
         options={{
-          tabBarLabel: translate("demoNavigator.debugTab"),
+          tabBarLabel: "Training log",
           tabBarIcon: ({ focused }) => (
-            <Icon icon="debug" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="community" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
-      />
+      />     
+
+
+
     </Tab.Navigator>
   )
 }

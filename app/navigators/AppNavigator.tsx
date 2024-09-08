@@ -40,6 +40,8 @@ export type AppStackParamList = {
   Demo: NavigatorScreenParams<DemoTabParamList>
   // 🔥 Your screens go here
   Settings: undefined
+	Activities: undefined
+	History: undefined
 	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -78,7 +80,9 @@ const AppStack = observer(function AppStack() {
       )}
 
       {/** 🔥 Your screens go here */}
-      <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
+      <Stack.Screen name="DemoSettings" component={Screens.SettingsScreen} />
+			<Stack.Screen name="DemoActivities" component={Screens.ActivitiesScreen} />
+			<Stack.Screen name="DemoHistory" component={Screens.HistoryScreen} />
 			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )

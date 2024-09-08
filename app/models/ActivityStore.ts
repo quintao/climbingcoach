@@ -10,9 +10,8 @@ export const ActivityStoreModel = types
   })
   .actions(withSetPropAction)
   .actions((store) => ({
-    createNewActivity(type: string, workout: string) {
+    createNewActivity(workout: string) {
       const activity = ActivityModel.create({
-        type: type,
         workout: workout,
         date: new Date().getMilliseconds().toString()
       })

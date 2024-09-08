@@ -7,7 +7,6 @@ import { withSetPropAction } from "./helpers/withSetPropAction"
 export const ActivityModel = types
   .model("Activity")
   .props({
-    type: '',
     date: '', // Ex: 2022-08-12 21:05:36
     workout: ""
   })

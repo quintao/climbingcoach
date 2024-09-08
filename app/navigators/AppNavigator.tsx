@@ -35,8 +35,6 @@ import { colors } from "app/theme"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  Welcome: undefined
-  Login: undefined
   Demo: NavigatorScreenParams<DemoTabParamList>
   // 🔥 Your screens go here
   Settings: undefined
@@ -67,7 +65,7 @@ const AppStack = observer(function AppStack() {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
-      initialRouteName={isAuthenticated ? "Welcome" : "Login"}
+      initialRouteName={"Demo"}
     >
     <Stack.Screen name="Demo" component={DemoNavigator} />
      {/** 🔥 Your screens go here */}

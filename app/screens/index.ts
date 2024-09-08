@@ -1,5 +1,3 @@
-export * from "./WelcomeScreen"
-
 export * from "./ActivitiesScreen"
 export * from "./DemoDebugScreen"
 export * from "./DemoShowroomScreen/DemoShowroomScreen"

@@ -10,7 +10,7 @@ import Markdown from 'react-native-markdown-display';
 
 
 async function GenerateTraining(history: string, goals:string , activities: Array<string>, preferences: string) {
-  const genAI = new GoogleGenerativeAI("AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ");
+  const genAI = new GoogleGenerativeAI("");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   let prompt = []

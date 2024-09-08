@@ -54,6 +54,10 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
   function HistoryScreen(_props) {
       const { activityStore } = useStores()
 
+      for (const a of activityStore.log) {
+        console.log(a)
+      }
+
       const [refreshing, setRefreshing] = React.useState(false)
 
     // simulate a longer refresh, if the refresh is too fast for UX
@@ -63,7 +67,20 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
       setRefreshing(false)
     }
 
-      return (
+
+    if (activityStore.log.length <= 0) {
+      return(
+        <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
+          <Text>You do not have any activities.</Text>
+        </Screen>
+      )
+    }
+
+    let data = activityStore.listOfActivities.slice()
+    data.sort((a, b) => b.creation_date - a.creation_date);
+
+
+    return (
         <Screen
           preset="fixed"
           safeAreaEdges={["top"]}
@@ -82,7 +99,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
         </View>
           <ListView<Activity>
             contentContainerStyle={$listContentContainer}
-            data={activityStore.listOfActivities.slice()}
+            data={data}
             refreshing={refreshing}
             estimatedItemSize={177}
             onRefresh={manualRefresh}
@@ -94,6 +111,8 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
             renderItem={({ item }) => (
               <WorkoutCard
                 workout={item}
+                onPressFavorite={() => activityStore.completeActivity(item, "")}
+
               />
             )}
           />
@@ -106,10 +125,10 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
   const WorkoutCard = observer(function WorkoutCard({
     workout,
     // isFavorite,
-    // onPressFavorite,
+    onPressFavorite,
   }: {
     workout: Activity
-
+    onPressFavorite: () => void
   }) {
  
     const imageUri = useMemo<ImageSourcePropType>(() => {
@@ -176,7 +195,8 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     )
   
     const handlePressFavorite = () => {
-
+      // console.log("marking as completed.")
+      // onPressFavorite()      
     }
   
     const handlePressCard = () => {
@@ -208,8 +228,6 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
         },
       [],
     )
-
-    console.log(workout)
 
     const creation_date = new Date(workout.creation_date);
     const formatted_creation_date = creation_date.toLocaleDateString();
@@ -247,23 +265,23 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
         {...accessibilityHintProps}
         RightComponent={<Image source={imageUri} style={$itemThumbnail} />}
         FooterComponent={
-          <Button
-            onPress={handlePressFavorite}
-            onLongPress={handlePressFavorite}
-            style={[$favoriteButton, true && $unFavoriteButton]}
-            accessibilityLabel={
-              true
-                ? translate("demoPodcastListScreen.accessibility.unfavoriteIcon")
-                : translate("demoPodcastListScreen.accessibility.favoriteIcon")
-            }
-            LeftAccessory={ButtonLeftAccessory}
-          >
-          </Button>
+          <View>
+            {workout.feedback != '' ? (
+              <Text>{workout.feedback}</Text>
+            ) : (<></>        
+            )}
+          </View>
         }
       />
     )
   })
 
+
+
+const $container: ViewStyle = {
+    paddingTop: spacing.lg + spacing.xl,
+    paddingHorizontal: spacing.lg,
+}
 
 // #region Styles
 const $screenContentContainer: ViewStyle = {

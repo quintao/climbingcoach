@@ -10,7 +10,7 @@ import Markdown from 'react-native-markdown-display';
 
 
 async function GenerateTraining(history: string, goals:string , activities: Array<string>, preferences: string) {
-  const genAI = new GoogleGenerativeAI("");
+  const genAI = new GoogleGenerativeAI("AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   let prompt = []
@@ -49,11 +49,7 @@ async function GenerateTraining(history: string, goals:string , activities: Arra
   `
   prompt.push(target)
   const final_prompt = prompt.join("\n")
-
-  console.log(final_prompt)
-
   const result = await model.generateContent(final_prompt);
-  console.log(result.response.text());
   return result.response.text(); 
 }
 
@@ -64,6 +60,43 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
       const [confirmationMessage, setConfirmationMessage] = React.useState('');
       const [preferencesValue, setPreferences] = React.useState('');
       const [trainingValue, setTraining] = React.useState('');
+      const [feedbackValue, setFeedback] = React.useState('');
+
+    console.log(activityStore.current.id)
+
+    if (activityStore.current.id > 0) {
+      return(
+      <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
+        <Text preset="heading" style={$title}>This is your current training</Text>
+
+        <View>
+          <Markdown>{activityStore.current.workout}</Markdown>
+        </View>
+
+
+        <Text style={{marginTop: 20, marginBottom: 10}}>Your feedback about this training</Text>
+        <TextInput
+          multiline={true}
+          numberOfLines={4}
+          onChangeText={setFeedback}
+          value={feedbackValue}
+          style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
+          placeholder={"Add your feedback here"}
+
+        /> 
+
+        <View style={{margin: 10}}>
+          <Button
+            title="Mark as completed"
+            onPress={async () => {
+              activityStore.completeActivity(feedbackValue)
+              setFeedback('')
+            }}
+          />
+        </View>        
+      </Screen>
+      )      
+    }
       
     return (
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
@@ -94,8 +127,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
               setTraining(training);
             }}
           />
-
-      </View>
+        </View>
 
       <View>
         <Text>{confirmationMessage}</Text>
@@ -110,10 +142,8 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
             <Button title="Accept training"
             
             onPress={async () => {
-              activityStore.createNewActivity(trainingValue)
+              activityStore.acceptActivity(trainingValue)
               setTraining('')
-              setConfirmationMessage("Training accepted for today")
-              console.log(activityStore)
             }}            
             >
             </Button>

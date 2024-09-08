@@ -19,6 +19,7 @@ export type DemoTabParamList = {
   DemoSettings: undefined
   DemoActivities: undefined
   DemoHistory: undefined
+
 }
 
 /**

@@ -1,7 +1,12 @@
 {
   "name": "ClimbingCoach",
   "displayName": "ClimbingCoach",
-  "expo": {
+   "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "35005669-faad-4b2f-b553-6ef2952aa6ba"
+      }
+    },
     "name": "ClimbingCoach",
     "slug": "ClimbingCoach",
     "scheme": "climbingcoach",

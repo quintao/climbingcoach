@@ -24,7 +24,7 @@ function build_one_activity(activity) {
 
 
 async function GenerateTraining(history: string, goals: string, injuries: string, activities, preferences: string) {
-  const genAI = new GoogleGenerativeAI("");
+  const genAI = new GoogleGenerativeAI("AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   let prompt = []

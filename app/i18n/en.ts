@@ -79,6 +79,9 @@ const en = {
     acceptTraining: "Let's do this!",
     suggestTraining: "Suggest training",
     markAsCompleted: "Mark as completed",
+    adaptItLabel: "Adapt it",
+    makeEasier: "Easier",
+    makeHarder: "Harder"
   },
   historyScreen: {
     yourLogTitle: "Your training log",

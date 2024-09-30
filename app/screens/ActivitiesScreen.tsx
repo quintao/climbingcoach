@@ -126,10 +126,10 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
             </TouchableOpacity>
             
             <View style={{margin: 20}}>
-              <Text>Or adapt it: </Text>
+              <Text tx={"demoActivitiesScreen.adaptItLabel"}/>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-              <Text>Easier</Text>
+              <Text tx={"demoActivitiesScreen.makeEasier"}/>
               <TouchableOpacity style={controlButtons}
                onPress={async () => {
                 handleTrainingChange('')
@@ -151,7 +151,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
               }}>
                 <Text>+</Text>
               </TouchableOpacity>
-              <Text>Harder</Text>              
+              <Text tx={"demoActivitiesScreen.makeHarder"}/>         
             </View>            
           </View>            
           </>) : <></>}        

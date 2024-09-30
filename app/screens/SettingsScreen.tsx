@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { TextStyle, View, ViewStyle, TextInput, Button, TouchableOpacity } from "react-native"
+import { TextStyle, View, ViewStyle, TextInput, TouchableOpacity } from "react-native"
 import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"

@@ -4,79 +4,9 @@ import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
 import { useStores } from "../models"
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GenerateTraining } from "../services/llm";
 import Markdown from 'react-native-markdown-display';
 import { translate } from "../i18n"
-
-
-function build_one_activity(activity: any) {
-  let activity_info = []
-
-  const dd = new Date(activity.completion_date);
-
-  activity_info.push("Workout completed on  " + dd.toLocaleDateString())
-  activity_info.push(activity.workout)
-  if (activity.feedback) {
-    activity_info.push("Feedback from the climber about this workout:" + activity.feedback)
-  }
-  return activity_info.join("\n")
-}
-
-
-async function GenerateTraining(history: string, goals: string, injuries: string, activities: any, preferences: string) {
-  const genAI = new GoogleGenerativeAI("");
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-  let prompt = []
-
-  const intro = "You're a climbing coach; you should help a rock climber who's trying to improve their climbing skills."
-  prompt.push(intro)
-  const context = "This is the overall context provided by the climber regarding their history with the sport:  " + history
-  prompt.push(context)
-
-  if (injuries != '') {
-    const context = "This is relevant information about injuries and/or health concerns from the climber:  " + injuries
-    prompt.push(context)
-  }
-
-  const what_to_achieve = "These are the goals that the climber is trying to achieve now, using their own words: " + goals 
-  prompt.push(what_to_achieve)
-  
-  const seven_days_ago = Date.now() - 7 * 24 * 60 * 60
-
-  if (activities.length > 0) {
-    let recent_activities_list = []
-
-    recent_activities_list.push("These are the last workouts the climber has performed:")
-    for (const activity of activities) {
-      if (activity.completion_date > seven_days_ago) {
-        recent_activities_list.push(build_one_activity(activity))
-      }
-    }
-    prompt.push(recent_activities_list.join("\n"))
-  } else {
-    prompt.push("In terms of last workouts, the climber has not done much in the last days.")
-    prompt.push("Take that into consideration when suggestion a workout: perhaps the climber needs a ramp-up phase.")
-  }
-
-  if (preferences) {
-    prompt.push("For today, these are the preferences of the climber: " + preferences)
-    prompt.push("You should respect the preferences of the climber, especially if they talk about duration of the workout, and if the climber mentioned being tired.")
-  }
-  
-  const target = `Please suggest a workout for the climber to do today.
-  The workout should be aligned with the goal of the climber, the history, and the feedback provided by the climber for the last workouts.
-  You should only provide the workout plan, and no other information, introduction, etc. Please do not talk about the climber's history.
-
-  When talking about lead climbing, use the French lead climbing grading system (6a, 6b, 7c+ etc). When talking about bouldering,
-  use the french bouldering grading system (6A, 6B, 8B+).
-  `
-  prompt.push(target)
-  const final_prompt = prompt.join("\n")
-  console.log(final_prompt)
-  const result = await model.generateContent(final_prompt);
-  return result.response.text(); 
-}
 
 export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
   function ActitiviesScreen(_props) {
@@ -122,19 +52,21 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           numberOfLines={4}
           onChangeText={handleFeedbackChange}
           value={feedbackValue}
-          style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
+          style={textInputStyle}
           placeholder={translate("demoActivitiesScreen.feedback")}
-
+          placeholderTextColor="#d6d8da"          
         /> 
 
         <View style={{margin: 10}}>
-          <Button
-            title="Mark as completed"
+          <TouchableOpacity
+            style={markAsCompletedStyle}
             onPress={async () => {
               activityStore.completeActivity(feedbackValue)
               handleFeedbackChange('')
             }}
-          />
+          >
+            <Text style={touchableOpacityTextStyle} tx="demoActivitiesScreen.markAsCompleted"/>
+          </TouchableOpacity>
         </View>        
       </Screen>
       )      
@@ -224,7 +156,7 @@ const textInputStyle = {
 };
 
 const touchableOpacityStyle = {
-  backgroundColor: "#363E46", // Primary color
+  backgroundColor: "#363E46",
   borderRadius: 15,
   padding: 10,
   justifyContent: "center",
@@ -243,7 +175,19 @@ const touchableOpacityTextStyle = {
 
 
 const acceptTrainingStyle = {
-  backgroundColor: "#ff7a66", // Primary color
+  backgroundColor: "#ff7a66",
+  borderRadius: 15,
+  padding: 10,
+  justifyContent: "center",
+  alignItems: "center",
+  shadowColor: "#DDD",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 2,
+};
+
+const markAsCompletedStyle = {
+  backgroundColor: "#76a388",
   borderRadius: 15,
   padding: 10,
   justifyContent: "center",

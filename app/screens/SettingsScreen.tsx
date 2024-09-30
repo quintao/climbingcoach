@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { ImageStyle, TextStyle, View, ViewStyle, TextInput, Button, StyleSheet } from "react-native"
+import { TextStyle, View, ViewStyle, TextInput, Button, StyleSheet } from "react-native"
 import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
@@ -23,7 +23,6 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
         setGoalsValue(text);
       };
 
-
       const [injuriesValue, setInjuriesValue] = React.useState(userBioStore.bio.injuries);
 
       const handleInjuriesValue = (text: string) => {
@@ -38,7 +37,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
         <Text preset="heading" tx="demoSettingsScreen.title" style={$title} />
         <Text tx="demoSettingsScreen.tagLine" style={$tagline} /> 
-        <Text style={{marginTop: 20, marginBottom: 10}}>Your climbing bio</Text>
+        <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.climbingBio"/>
         <TextInput
           multiline={true}
           numberOfLines={4}
@@ -48,7 +47,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           placeholder={userBioStore.bioInfo.history? userBioStore.bioInfo.history : "Enter your history here"}
         />
 
-      <Text style={{marginTop: 20, marginBottom: 10}}>Your climbing goals</Text>
+      <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.climbingGoals"/>
         <TextInput
           multiline={true}
           numberOfLines={4}
@@ -59,14 +58,14 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
 
         />
 
-        <Text style={{marginTop: 20, marginBottom: 10}}>Injuries and/or health concerns</Text>
+        <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.healthInformation"/>
         <TextInput
           multiline={true}
           numberOfLines={4}
           onChangeText={handleInjuriesValue}
           value={injuriesValue}
           style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
-          placeholder={userBioStore.bioInfo.injuries? userBioStore.bioInfo.injuries : "Enter information about injuries or relevant health information"}
+          placeholder={userBioStore.bioInfo.injuries? userBioStore.bioInfo.injuries : "Enter information about injuries or any relevant health information"}
 n
         />         
 

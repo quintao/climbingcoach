@@ -58,6 +58,10 @@ const en = {
     climbingBio: "Your climbing biography",    
     climbingGoals: "Your climbing goals",
     healthInformation: "Injuries and/or health concerns",
+    historyPlaceholder: "Add your biography here",
+    goalsPlaceholder: "Add your climbing goals here",
+    healthPlaceholder: "Enter information about injuries or any relevant health information",
+    informationSaved: "All data saved",
   },
   demoActivitiesScreen: {
     currentTrainingTitle: "This is your current training",

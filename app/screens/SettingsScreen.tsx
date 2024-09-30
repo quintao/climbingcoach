@@ -4,6 +4,7 @@ import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
 import { useStores } from "../models"
+import { translate } from "../i18n"
 
 export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
   function SettingsScreen(_props) {
@@ -40,7 +41,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           onChangeText={handleHistoryChange}
           value={historyValue}
           style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10  }}
-          placeholder={userBioStore.bioInfo.history? userBioStore.bioInfo.history : "Enter your history here"}
+          placeholder={userBioStore.bioInfo.history? userBioStore.bioInfo.history : translate("demoSettingsScreen.historyPlaceholder")}
         />
 
       <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.climbingGoals"/>
@@ -50,7 +51,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           onChangeText={handleGoalsChange}
           value={goalsValue}
           style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
-          placeholder={userBioStore.bioInfo.goals? userBioStore.bioInfo.goals : "Enter your goals here"}
+          placeholder={userBioStore.bioInfo.goals? userBioStore.bioInfo.goals : translate("demoSettingsScreen.goalsPlaceholder")}
 
         />
 
@@ -61,7 +62,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           onChangeText={handleInjuriesValue}
           value={injuriesValue}
           style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
-          placeholder={userBioStore.bioInfo.injuries? userBioStore.bioInfo.injuries : "Enter information about injuries or any relevant health information"}
+          placeholder={userBioStore.bioInfo.injuries? userBioStore.bioInfo.injuries : translate("demoSettingsScreen.healthPlaceholder")}
         />         
 
       <View style={{margin: 10}}>
@@ -71,7 +72,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
             userBioStore.setHistory(historyValue)
             userBioStore.setGoals(goalsValue)
             userBioStore.setInjuries(injuriesValue)
-            setConfirmationMessage("Information saved")
+            setConfirmationMessage(translate("demoSettingsScreen.informationSaved"))
 
             // Clear the message after 2 seconds
             setTimeout(() => {

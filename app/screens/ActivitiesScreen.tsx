@@ -108,7 +108,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
     if (activityStore.current.id > 0) {
       return(
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
-        <Text preset="heading" style={$title}>This is your current training</Text>
+        <Text preset="heading" style={$title} tx="demoActivitiesScreen.currentTrainingTitle"/>
 
         <View>
           <Markdown>{activityStore.current.workout}</Markdown>
@@ -141,9 +141,9 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
       
     return (
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
-        <Text preset="heading" style={$title}>Let's get some training in!</Text>
+        <Text preset="heading" style={$title} tx="demoActivitiesScreen.title" />
 
-        <Text style={{marginTop: 20, marginBottom: 10}}>Any preferences for today? Just type them below, then click "Suggest training"</Text>
+        <Text style={{marginTop: 20, marginBottom: 10}} tx="demoActivitiesScreen.preferences" />
         <TextInput
           multiline={true}
           numberOfLines={4}

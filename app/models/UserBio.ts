@@ -9,7 +9,8 @@ export const UserBioModel = types
   .props({
     history: "",
     goals: "",
-    injuries: ""
+    injuries: "",
+    french_grading: true,
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

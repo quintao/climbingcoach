@@ -18,6 +18,9 @@ export const UserBioStoreModel = types
     setInjuries(injuries: string) {
         store.bio.injuries = injuries
     },
+    setUseFrenchSystem(value: boolean) {
+      store.bio.french_grading = value
+    },
     clearBio() {
         this.setHistory('')
         this.setGoals('')

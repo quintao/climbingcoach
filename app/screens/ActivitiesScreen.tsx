@@ -98,6 +98,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
                 userBioStore.bioInfo.history,
                 userBioStore.bioInfo.goals,
                 userBioStore.bioInfo.injuries,
+                userBioStore.bioInfo.french_grading,
                 activities, preferencesValue);
                 handleConfirmationMessageChange("")                
                 handleTrainingChange(training);

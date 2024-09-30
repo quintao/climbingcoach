@@ -62,6 +62,10 @@ const en = {
     goalsPlaceholder: "Add your climbing goals here",
     healthPlaceholder: "Enter information about injuries or any relevant health information",
     informationSaved: "All data saved",
+    gradeSystem: "Grading system",
+    usGradeSystem: "US",
+    frenchGradeSystem: "French",
+
   },
   demoActivitiesScreen: {
     currentTrainingTitle: "This is your current training",

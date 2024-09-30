@@ -69,6 +69,11 @@ const en = {
     climbingBio: "Your climbing biography",    
     climbingGoals: "Your climbing goals",
     healthInformation: "Injuries and/or health concerns",
+    feedback: "Add your feedback here",
+    preferencesPlaceholder: "Enter your preferences for today's training. For example: I do not have a lot of time, just give me some ideas for fingerboarding at home",
+    generatingTraining: "Generating a training for you",
+    acceptTraining: "Let's do this!",
+    suggestTraining: "Suggest training",
   },
   historyScreen: {
     yourLogTitle: "Your training log",

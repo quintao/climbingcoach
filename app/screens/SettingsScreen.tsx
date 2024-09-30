@@ -148,6 +148,5 @@ const touchableOpacityStyle = {
 
 const touchableOpacityTextStyle = {
   color: "#FFF", // White text
-  fontSize: 16,
-  fontWeight: "bold",
+  fontSize: 16
 };

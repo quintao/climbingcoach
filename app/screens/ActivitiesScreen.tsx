@@ -8,7 +8,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import Markdown from 'react-native-markdown-display';
 
 
-function build_one_activity(activity) {
+function build_one_activity(activity: any) {
   let activity_info = []
 
   const dd = new Date(activity.completion_date);
@@ -22,7 +22,7 @@ function build_one_activity(activity) {
 }
 
 
-async function GenerateTraining(history: string, goals: string, injuries: string, activities, preferences: string) {
+async function GenerateTraining(history: string, goals: string, injuries: string, activities: any, preferences: string) {
   const genAI = new GoogleGenerativeAI("AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 

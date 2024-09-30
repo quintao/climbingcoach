@@ -1,28 +1,17 @@
 import { observer } from "mobx-react-lite"
-import React, { ComponentType, FC, useMemo } from "react"
+import React, { FC, useMemo } from "react"
 import {
-  AccessibilityProps,
   Image,
   ImageSourcePropType,
   ImageStyle,
-  Platform,
-  StyleSheet,
   TextStyle,
   View,
   ViewStyle,
   TouchableOpacity
 } from "react-native"
 import { type ContentStyle } from "@shopify/flash-list"
-import Animated, {
-  interpolate,
-  Extrapolate,
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated"
 import {
-  ButtonAccessoryProps,
   Card,
-  Icon,
   ListView,
   Screen,
   Text,
@@ -34,8 +23,6 @@ import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
 import { delay } from "../utils/delay"
 
-const ICON_SIZE = 14
-
 const rnrImage1 = require("../../assets/images/demo/rnr-image-1.png")
 const rnrImage2 = require("../../assets/images/demo/rnr-image-2.png")
 const rnrImage3 = require("../../assets/images/demo/rnr-image-3.png")
@@ -44,15 +31,9 @@ const rnrImages = [rnrImage1, rnrImage2, rnrImage3]
 
 export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
   function HistoryScreen(_props) {
-      const { activityStore } = useStores()
+    const { activityStore } = useStores()
+    const [refreshing, setRefreshing] = React.useState(false)
 
-      for (const a of activityStore.log) {
-        console.log(a)
-      }
-
-      const [refreshing, setRefreshing] = React.useState(false)
-
-    // simulate a longer refresh, if the refresh is too fast for UX
     async function manualRefresh() {
       setRefreshing(true)
       await Promise.all([activityStore.listOfActivities, delay(750)])
@@ -89,8 +70,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
             renderItem={({ item }) => (
               <WorkoutCard
                 workout={item}
-                onPressFavorite={() => activityStore.completeActivity(item, "")}
-
+                onPressFavorite={() => {}}
               />
             )}
             ListFooterComponent={
@@ -114,7 +94,6 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
 
   const WorkoutCard = observer(function WorkoutCard({
     workout,
-    // isFavorite,
     onPressFavorite,
   }: {
     workout: Activity
@@ -205,13 +184,6 @@ const $itemThumbnail: ImageStyle = {
   marginTop: spacing.sm,
   borderRadius: 50,
   alignSelf: "flex-start",
-}
-
-const $iconContainer: ViewStyle = {
-  height: ICON_SIZE,
-  width: ICON_SIZE,
-  flexDirection: "row",
-  marginEnd: spacing.sm,
 }
 
 const $metadata: TextStyle = {

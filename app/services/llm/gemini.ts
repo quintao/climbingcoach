@@ -16,7 +16,7 @@ function build_one_activity(activity: any) {
   
   
   export async function GenerateTraining(history: string, goals: string, injuries: string, activities: any, preferences: string) {
-    const apiKey = "AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ"
+    const apiKey = ""
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   

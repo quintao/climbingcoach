@@ -60,7 +60,8 @@ const en = {
     healthInformation: "Injuries and/or health concerns",
   },
   demoActivitiesScreen: {
-    crrentTrainingTitle: "This is your current training",
+    currentTrainingTitle: "This is your current training",
+    currentTrainingFeedback: "Your feedback about this training",
     title: "Let's get some training in!",
     preferences: "Any preferences for today? Just type them below, then click Suggest Training",
     tagLine:

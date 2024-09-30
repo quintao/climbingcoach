@@ -1,10 +1,9 @@
 import React, { FC } from "react"
-import { ImageStyle, TextStyle, View, ViewStyle, TextInput, Button, StyleSheet } from "react-native"
+import { TextStyle, View, ViewStyle, TextInput, Button } from "react-native"
 import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
 import { useStores } from "../models"
-import { act } from "@testing-library/react-native"
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Markdown from 'react-native-markdown-display';
 

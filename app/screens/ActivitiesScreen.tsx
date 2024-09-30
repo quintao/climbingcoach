@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { TextStyle, View, ViewStyle, TextInput, Button } from "react-native"
+import { TextStyle, View, ViewStyle, TextInput, Button, TouchableOpacity } from "react-native"
 import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
@@ -24,7 +24,7 @@ function build_one_activity(activity: any) {
 
 
 async function GenerateTraining(history: string, goals: string, injuries: string, activities: any, preferences: string) {
-  const genAI = new GoogleGenerativeAI("AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ");
+  const genAI = new GoogleGenerativeAI("");
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   let prompt = []
@@ -150,13 +150,14 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           numberOfLines={4}
           onChangeText={handlePreferencesChange}
           value={preferencesValue}
-          style={{ height: 75, backgroundColor: '#E8F0FE', padding: 10  }}
+          style={textInputStyle}
           placeholder={translate("demoActivitiesScreen.preferencesPlaceholder")}
+          placeholderTextColor="#d6d8da"
         />
 
         <View style={{margin: 10}}>
-          <Button
-            title={translate("demoActivitiesScreen.suggestTraining")}
+          <TouchableOpacity 
+            style={touchableOpacityStyle}           
             onPress={async () => {
               handleTrainingChange('')
               handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
@@ -169,7 +170,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
                 handleConfirmationMessageChange("")                
                 handleTrainingChange(training);
             }}
-          />
+          ><Text style={touchableOpacityTextStyle} tx="demoActivitiesScreen.suggestTraining"/></TouchableOpacity>
         </View>
 
       <View>
@@ -181,14 +182,16 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
         <Markdown>{trainingValue}</Markdown>
         {trainingValue ? (
           <>
-          <View style={{margin: 10}}>
-            <Button title={translate("demoActivitiesScreen.acceptTraining")}            
+          <View style={{margin: 25}}>
+            <TouchableOpacity
+            style={acceptTrainingStyle}           
             onPress={async () => {
               activityStore.acceptActivity(trainingValue)
               setTraining('')
             }}            
             >
-            </Button>
+            <Text style={touchableOpacityTextStyle} tx={"demoActivitiesScreen.acceptTraining"}/>
+            </TouchableOpacity>
           </View>            
           </>) : <></>}        
       </View>
@@ -206,3 +209,47 @@ const $container: ViewStyle = {
 const $title: TextStyle = {
   marginBottom: spacing.sm,
 }
+
+
+const textInputStyle = {
+  fontSize: 16,
+  padding: 10,
+  borderRadius: 5,
+  backgroundColor: "#FFF", // White background
+  shadowColor: "#DDD",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 2, // Adds a subtle shadow
+  marginBottom: 20,
+};
+
+const touchableOpacityStyle = {
+  backgroundColor: "#363E46", // Primary color
+  borderRadius: 15,
+  padding: 10,
+  justifyContent: "center",
+  alignItems: "center",
+  shadowColor: "#DDD",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 2,
+};
+
+const touchableOpacityTextStyle = {
+  color: "#FFF", // White text
+  fontSize: 16,
+  fontWeight: "bold",
+};
+
+
+const acceptTrainingStyle = {
+  backgroundColor: "#ff7a66", // Primary color
+  borderRadius: 15,
+  padding: 10,
+  justifyContent: "center",
+  alignItems: "center",
+  shadowColor: "#DDD",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 2,
+};

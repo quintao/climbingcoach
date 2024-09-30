@@ -56,7 +56,7 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: translate("demoNavigator.settingsTab"),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="community" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="settings" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
       />
@@ -65,9 +65,9 @@ export function DemoNavigator() {
         name="DemoActivities"
         component={ActivitiesScreen}
         options={{
-          tabBarLabel: "Training plans",
+          tabBarLabel: "Training plan",
           tabBarIcon: ({ focused }) => (
-            <Icon icon="community" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="check" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
       />     
@@ -78,7 +78,7 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: "Training log",
           tabBarIcon: ({ focused }) => (
-            <Icon icon="community" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="more" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
       />     

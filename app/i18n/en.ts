@@ -70,6 +70,13 @@ const en = {
     climbingGoals: "Your climbing goals",
     healthInformation: "Injuries and/or health concerns",
   },
+  historyScreen: {
+    yourLogTitle: "Your training log",
+    emptyActivities: "You do not have any activities yet.",
+    notCompletedYet: "Not completed yet",
+    completed: "Completed on",
+
+  },
 
   ...demoEn,
 }

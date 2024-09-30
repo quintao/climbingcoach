@@ -78,6 +78,7 @@ const en = {
     generatingTraining: "Generating a training for you",
     acceptTraining: "Let's do this!",
     suggestTraining: "Suggest training",
+    markAsCompleted: "Mark as completed",
   },
   historyScreen: {
     yourLogTitle: "Your training log",

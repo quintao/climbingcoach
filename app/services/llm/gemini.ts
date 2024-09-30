@@ -22,7 +22,7 @@ function build_one_activity(activity: any) {
     return result.response.text(); 
   }
 
-  export async function GenerateTraining(history: string, goals: string, injuries: string, activities: any, preferences: string) {
+  export async function GenerateTraining(history: string, goals: string, injuries: string, french_grading: boolean, activities: any, preferences: string) {
     
     let prompt = []
       
@@ -84,11 +84,16 @@ function build_one_activity(activity: any) {
     For example, if the last workouts felt very hard, you should make sure you suggest easier workouts. As a rule of thumb, the workouts you provide should not be very hard.
 
     You should only provide the workout plan, and no other information, introduction, etc. Please do not talk about the climber's history.
-  
-    When talking about lead climbing, use the French lead climbing grading system (6a, 6b, 7c+ etc). When talking about bouldering,
-    use the french bouldering grading system (6A, 6B, 8B+).
     `
     prompt.push(target)
+    if (french_grading == true) {
+        prompt.push(`When talking about lead climbing, use the French lead climbing grading system (6a, 6b, 7c+ etc). When talking about bouldering,
+        use the french bouldering grading system (6A, 6B, 8B+).`)
+    } else {
+        prompt.push(`When talking about lead climbing, use the US lead climbing grading system (5.9, 5.10a, 5.12c etc). When talking about bouldering,
+        use the V bouldering grading system (V0, V1, V10 etc).`)
+    }
+    
     const final_prompt = prompt.join("\n")
     const result = await generate(final_prompt);
     return result

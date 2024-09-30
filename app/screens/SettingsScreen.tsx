@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { TextStyle, View, ViewStyle, TextInput, TouchableOpacity } from "react-native"
+import { TextStyle, View, ViewStyle, TextInput, TouchableOpacity, Switch } from "react-native"
 import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
@@ -28,7 +28,9 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
         setInjuriesValue(text);
       };
 
-      const [confirmationMessage, setConfirmationMessage] = React.useState('');
+     const [confirmationMessage, setConfirmationMessage] = React.useState('');
+
+     const [isFrenchGrading, setFrenchGrading] = React.useState(userBioStore.bio.french_grading);
 
     return (
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
@@ -65,7 +67,21 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           style={textInputStyle}
           placeholder={userBioStore.bioInfo.injuries? userBioStore.bioInfo.injuries : translate("demoSettingsScreen.healthPlaceholder")}
           placeholderTextColor="#d6d8da"          
-        />         
+        />
+
+        <View>
+          <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.gradeSystem"/>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.usGradeSystem"/>
+            <Switch
+              trackColor={{ false: "#fa7875", true: "#668cff" }}
+              thumbColor={isFrenchGrading ? "#f5dc3c" : "#5757f2"}
+              onValueChange={setFrenchGrading}
+              value={isFrenchGrading}
+            />
+            <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.frenchGradeSystem"/>
+          </View>                 
+        </View>
 
       <View style={{margin: 10}}>
         <TouchableOpacity
@@ -74,6 +90,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
             userBioStore.setHistory(historyValue)
             userBioStore.setGoals(goalsValue)
             userBioStore.setInjuries(injuriesValue)
+            userBioStore.setUseFrenchSystem(isFrenchGrading)
             setConfirmationMessage(translate("demoSettingsScreen.informationSaved"))
 
             // Clear the message after 2 seconds

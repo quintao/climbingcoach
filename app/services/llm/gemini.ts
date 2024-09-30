@@ -14,12 +14,16 @@ function build_one_activity(activity: any) {
     return activity_info.join("\n")
   }
   
-  
-  export async function GenerateTraining(history: string, goals: string, injuries: string, activities: any, preferences: string) {
-    const apiKey = "AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ"
+  async function generate(prompt: string) {
+    const apiKey = ""
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-  
+    const result = await model.generateContent(prompt);
+    return result.response.text(); 
+  }
+
+  export async function GenerateTraining(history: string, goals: string, injuries: string, activities: any, preferences: string) {
+    
     let prompt = []
       
     const intro = "You're a climbing coach; you should help a rock climber who's trying to improve their climbing skills."
@@ -69,6 +73,7 @@ function build_one_activity(activity: any) {
     }
   
     if (preferences) {
+
       prompt.push("For today, these are the preferences of the climber: " + preferences)
       prompt.push("You should respect the preferences of the climber, especially if they talk about duration of the workout, and if the climber mentioned being tired.")
       prompt.push("If the climber mentions that they want to do a sport that is different from climbing, you should make sure that this sport does not negatively impact the climbing fitness of the climber.")
@@ -85,6 +90,35 @@ function build_one_activity(activity: any) {
     `
     prompt.push(target)
     const final_prompt = prompt.join("\n")
-    const result = await model.generateContent(final_prompt);
-    return result.response.text(); 
+    const result = await generate(final_prompt);
+    return result
+  }
+
+  export async function MakeItEasier(workout: string) {
+    
+    let prompt = []
+      
+    const intro = "You're a climbing coach; You generated the training below but the climber found it too hard. Make it a little bit easier."
+    prompt.push(intro)
+    prompt.push(workout)
+    prompt.push(`You should only provide the workout plan, and no other information, introduction, etc")
+      When talking about lead climbing, use the French lead climbing grading system (6a, 6b, 7c+ etc). When talking about bouldering, use the french bouldering grading system (6A, 6B, 8B+).`)
+    const final_prompt = prompt.join("\n")
+    const result = await generate(final_prompt);
+    return result
+  }
+
+  export async function MakeItHarder(workout: string) {
+    
+    let prompt = []
+      
+    const intro = "You're a climbing coach; You generated the training below but the climber found it too hard. Make it a little bit harder."
+    prompt.push(intro)
+    prompt.push(workout)
+    prompt.push(`You should only provide the workout plan, and no other information, introduction, etc")
+      When talking about lead climbing, use the French lead climbing grading system (6a, 6b, 7c+ etc). When talking about bouldering, use the french bouldering grading system (6A, 6B, 8B+).`)
+
+    const final_prompt = prompt.join("\n")
+    const result = await generate(final_prompt);
+    return result
   }

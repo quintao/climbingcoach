@@ -1,5 +1,4 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import Config from "react-native-config";
 
 function build_one_activity(activity: any) {
     let activity_info = []

@@ -115,7 +115,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
         </View>
 
 
-        <Text style={{marginTop: 20, marginBottom: 10}}>Your feedback about this training</Text>
+        <Text style={{marginTop: 20, marginBottom: 10}} tx="demoActivitiesScreen.currentTrainingFeedback"/>
         <TextInput
           multiline={true}
           numberOfLines={4}

@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { TextStyle, View, ViewStyle, TextInput, Button } from "react-native"
+import { TextStyle, View, ViewStyle, TextInput, Button, TouchableOpacity } from "react-native"
 import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
@@ -40,8 +40,9 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           numberOfLines={4}
           onChangeText={handleHistoryChange}
           value={historyValue}
-          style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10  }}
+          style={textInputStyle}
           placeholder={userBioStore.bioInfo.history? userBioStore.bioInfo.history : translate("demoSettingsScreen.historyPlaceholder")}
+          placeholderTextColor="#d6d8da"
         />
 
       <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.climbingGoals"/>
@@ -50,9 +51,9 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           numberOfLines={4}
           onChangeText={handleGoalsChange}
           value={goalsValue}
-          style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
+          style={textInputStyle}
           placeholder={userBioStore.bioInfo.goals? userBioStore.bioInfo.goals : translate("demoSettingsScreen.goalsPlaceholder")}
-
+          placeholderTextColor="#d6d8da"
         />
 
         <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.healthInformation"/>
@@ -61,13 +62,14 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           numberOfLines={4}
           onChangeText={handleInjuriesValue}
           value={injuriesValue}
-          style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
+          style={textInputStyle}
           placeholder={userBioStore.bioInfo.injuries? userBioStore.bioInfo.injuries : translate("demoSettingsScreen.healthPlaceholder")}
+          placeholderTextColor="#d6d8da"          
         />         
 
       <View style={{margin: 10}}>
-        <Button
-          title="Save"
+        <TouchableOpacity
+          style={touchableOpacityStyle}
           onPress={() => {
             userBioStore.setHistory(historyValue)
             userBioStore.setGoals(goalsValue)
@@ -79,7 +81,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
               setConfirmationMessage('');
             }, 2000);
           }}
-        />        
+        ><Text style={touchableOpacityTextStyle}>Save</Text></TouchableOpacity>
       </View>
 
       <View>
@@ -102,3 +104,33 @@ const $title: TextStyle = {
 const $tagline: TextStyle = {
   marginBottom: spacing.xxl,
 }
+
+const textInputStyle = {
+  fontSize: 16,
+  padding: 10,
+  borderRadius: 5,
+  backgroundColor: "#FFF", // White background
+  shadowColor: "#DDD",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 2, // Adds a subtle shadow
+  marginBottom: 20,
+};
+
+const touchableOpacityStyle = {
+  backgroundColor: "#363E46", // Primary color
+  borderRadius: 15,
+  padding: 10,
+  justifyContent: "center",
+  alignItems: "center",
+  shadowColor: "#DDD",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 2,
+};
+
+const touchableOpacityTextStyle = {
+  color: "#FFF", // White text
+  fontSize: 16,
+  fontWeight: "bold",
+};

@@ -1,11 +1,9 @@
 import React, { FC } from "react"
-import { TextStyle, View, ViewStyle, TextInput, Button, StyleSheet } from "react-native"
+import { TextStyle, View, ViewStyle, TextInput, Button } from "react-native"
 import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
 import { useStores } from "../models"
-
-
 
 export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
   function SettingsScreen(_props) {
@@ -29,9 +27,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
         setInjuriesValue(text);
       };
 
-
       const [confirmationMessage, setConfirmationMessage] = React.useState('');
-
 
     return (
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
@@ -66,9 +62,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           value={injuriesValue}
           style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
           placeholder={userBioStore.bioInfo.injuries? userBioStore.bioInfo.injuries : "Enter information about injuries or any relevant health information"}
-n
         />         
-
 
       <View style={{margin: 10}}>
         <Button

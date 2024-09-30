@@ -48,7 +48,7 @@ const en = {
     debugTab: "Debug",
     communityTab: "Community",
     podcastListTab: "Podcast",
-    settingsTab: "Settings",
+    settingsTab: "About you",
 
   },
   demoSettingsScreen: {

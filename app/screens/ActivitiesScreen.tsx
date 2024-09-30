@@ -4,7 +4,7 @@ import { Screen, Text } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
 import { useStores } from "../models"
-import { GenerateTraining } from "../services/llm";
+import { GenerateTraining, MakeItEasier, MakeItHarder } from "../services/llm";
 import Markdown from 'react-native-markdown-display';
 import { translate } from "../i18n"
 
@@ -116,14 +116,43 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           <>
           <View style={{margin: 25}}>
             <TouchableOpacity
-            style={acceptTrainingStyle}           
-            onPress={async () => {
-              activityStore.acceptActivity(trainingValue)
-              setTraining('')
-            }}            
+              style={acceptTrainingStyle}           
+              onPress={async () => {
+                activityStore.acceptActivity(trainingValue)
+                setTraining('')
+              }}            
             >
             <Text style={touchableOpacityTextStyle} tx={"demoActivitiesScreen.acceptTraining"}/>
             </TouchableOpacity>
+            
+            <View style={{margin: 20}}>
+              <Text>Or adapt it: </Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              <Text>Easier</Text>
+              <TouchableOpacity style={controlButtons}
+               onPress={async () => {
+                handleTrainingChange('')
+                handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
+                const training  = await MakeItEasier(trainingValue);
+                handleConfirmationMessageChange("")                
+                handleTrainingChange(training);
+              }}>
+                <Text>-</Text>
+              </TouchableOpacity>
+              <Text>x</Text>              
+              <TouchableOpacity style={controlButtons}
+               onPress={async () => {
+                handleTrainingChange('')
+                handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
+                const training  = await MakeItHarder(trainingValue);
+                handleConfirmationMessageChange("")                
+                handleTrainingChange(training);
+              }}>
+                <Text>+</Text>
+              </TouchableOpacity>
+              <Text>Harder</Text>              
+            </View>            
           </View>            
           </>) : <></>}        
       </View>
@@ -196,4 +225,17 @@ const markAsCompletedStyle = {
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: 2,
+};
+
+const controlButtons = {
+  backgroundColor: "#bec2bf",
+  margin: 10,
+  width: 30,
+  height: 30,
+  border: "1px solid #ccc", /* Adjust border color and width as needed */
+  borderRadius: 0, /* Remove rounded corners for a square shape */
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  fontSize: 15
 };

@@ -6,6 +6,7 @@ import { spacing } from "../theme"
 import { useStores } from "../models"
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import Markdown from 'react-native-markdown-display';
+import { translate } from "../i18n"
 
 
 function build_one_activity(activity: any) {
@@ -122,7 +123,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           onChangeText={handleFeedbackChange}
           value={feedbackValue}
           style={{ height: 150, backgroundColor: '#E8F0FE', padding: 10 }}
-          placeholder={"Add your feedback here"}
+          placeholder={translate("demoActivitiesScreen.feedback")}
 
         /> 
 
@@ -150,15 +151,15 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           onChangeText={handlePreferencesChange}
           value={preferencesValue}
           style={{ height: 75, backgroundColor: '#E8F0FE', padding: 10  }}
-          placeholder={"Enter your preferences here for example: I do not have a lot of time, just give me some ideas for fingerboarding at home"}
+          placeholder={translate("demoActivitiesScreen.preferencesPlaceholder")}
         />
 
         <View style={{margin: 10}}>
           <Button
-            title="Suggest training"
+            title={translate("demoActivitiesScreen.suggestTraining")}
             onPress={async () => {
               handleTrainingChange('')
-              handleConfirmationMessageChange("Generating training ...")
+              handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
               const activities = activityStore.listOfActivities;
               const training  = await GenerateTraining(
                 userBioStore.bioInfo.history,
@@ -181,8 +182,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
         {trainingValue ? (
           <>
           <View style={{margin: 10}}>
-            <Button title="Accept training"
-            
+            <Button title={translate("demoActivitiesScreen.acceptTraining")}            
             onPress={async () => {
               activityStore.acceptActivity(trainingValue)
               setTraining('')

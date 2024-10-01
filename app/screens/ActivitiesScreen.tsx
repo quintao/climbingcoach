@@ -91,6 +91,13 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           <TouchableOpacity 
             style={touchableOpacityStyle}           
             onPress={async () => {
+              handleConfirmationMessageChange("")                
+
+              if (userBioStore.bioInfo.history == '' || userBioStore.bioInfo.goals == '') {
+                handleConfirmationMessageChange(translate("demoActivitiesScreen.validateHistoryGoals"))
+                return;
+              }
+
               handleTrainingChange('')
               handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
               const activities = activityStore.listOfActivities;

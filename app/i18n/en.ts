@@ -79,6 +79,7 @@ const en = {
     healthInformation: "Injuries and/or health concerns",
     feedback: "Add your feedback here",
     preferencesPlaceholder: "Enter your preferences for today's training. For example: I do not have a lot of time, just give me some ideas for fingerboarding at home",
+    validateHistoryGoals: "Please visit the About You screen and insert your climbing history and goals. Then we can generate a training for you.",
     generatingTraining: "Generating a training for you",
     acceptTraining: "Let's do this!",
     suggestTraining: "Suggest training",

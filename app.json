@@ -12,9 +12,9 @@
     "scheme": "climbingcoach",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./ignite-templates/app-icon/icon.png",
+    "icon": "./assets/images/icon.png",
     "splash": {
-      "image": "./ignite-templates/app-icon/splash.png",
+      "image": "./assets/images/splash_big.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -26,14 +26,14 @@
       "**/*"
     ],
     "android": {
-      "icon": "./ignite-templates/app-icon/icon.png",
+      "icon": "./assets/images/app-icon-android-legacy.png",
       "package": "com.climbingcoach",
       "adaptiveIcon": {
-        "foregroundImage": "./ignite-templates/app-icon/icon.png.png",
-        "backgroundImage": "./ignite-templates/app-icon/icon.png.png"
+        "foregroundImage": "./assets/images/app-icon-android-adaptive-foreground.png",
+        "backgroundImage": "./assets/images/app-icon-android-adaptive-background.png"
       },
       "splash": {
-        "image": "./ignite-templates/app-icon/icon.png/splash.png",
+        "image": "./assets/images/splash_big.png",
         "resizeMode": "contain",
         "backgroundColor": "#ffffff"
       }

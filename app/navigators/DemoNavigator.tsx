@@ -6,10 +6,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
 import { SettingsScreen, ActivitiesScreen, HistoryScreen } from "../screens"
-import { DemoPodcastListScreen } from "../screens/DemoPodcastListScreen"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
-import { Markup } from 'react-render-markup';
 
 export type DemoTabParamList = {
   DemoSettings: undefined

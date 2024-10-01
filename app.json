@@ -1,14 +1,14 @@
 {
-  "name": "ClimbingCoach",
-  "displayName": "ClimbingCoach",
+  "name": "Ai'titude",
+  "displayName": "Ai'titude",
    "expo": {
     "extra": {
       "eas": {
         "projectId": "35005669-faad-4b2f-b553-6ef2952aa6ba"
       }
     },
-    "name": "ClimbingCoach",
-    "slug": "ClimbingCoach",
+    "name": "Ai'titude",
+    "slug": "Ai'titude",
     "scheme": "climbingcoach",
     "version": "1.0.0",
     "orientation": "portrait",

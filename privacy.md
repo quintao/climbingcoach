@@ -1,12 +1,14 @@
 # Privacy policy for the Ai'titude app
 
 Last Updated: October 2nd, 2024
+
+
 Welcome to Ai'titude! Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your personal information when you use the Openjoy app and website.
 
 ## Information We Collect
 
 The app has no login, therefore we do not collect any personal information and do not
-create an account for th eusers.
+create an account for the users.
 
 The only personal information we collect is:
 
@@ -30,7 +32,7 @@ All the data in the app lives on your phone! It's not stored in any of Ai'titude
 
 ## Data deletion
 
-If you want to remove all of our data, you can just unistall the app. All the data will be deleted.
+If you want to remove all of our data, you can just unistall the app. All the data will be deleted, since no data exists on the Cloud.
 
 
 ## Changes to This Policy

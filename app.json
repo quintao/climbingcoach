@@ -26,11 +26,11 @@
       "**/*"
     ],
     "android": {
-      "icon": "./assets/images/app-icon-android-legacy.png",
+      "icon": "./assets/images/icon.png",
       "package": "com.climbingcoach",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/app-icon-android-adaptive-foreground.png",
-        "backgroundImage": "./assets/images/app-icon-android-adaptive-background.png"
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundImage": "./assets/images/icon.png"
       },
       "splash": {
         "image": "./assets/images/splash_big.png",

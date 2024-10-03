@@ -4,7 +4,9 @@
 
 Ai'titude is an open source climbing coach app.
 
-You know when you go to the climbing gym and have no idea what do train? Ai'titude is there for you :)
+You know when you go to the climbing gym and have no idea what to train? Or ... you're super busy and need flexible training plans? Or even, you're like many of us and cannot really commit to a boring weekly training plan?
+
+**Ai'titude is here for you :)**
 
 ## How it works
 

@@ -54,7 +54,7 @@ yarn android
 in your command line and the emulator should show up.
 
 
-## Creating an APK or app bundle.
+## Creating an APK or app bundle
 
 I use NPX/expo to handle builds, so it's as easy as:
 

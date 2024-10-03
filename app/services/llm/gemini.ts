@@ -14,7 +14,7 @@ function build_one_activity(activity: any) {
   }
   
   async function generate(prompt: string) {
-    const apiKey = "AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ"
+    const apiKey = ""
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);

@@ -13,7 +13,7 @@ You know when you go to the climbing gym and have no idea what to train? Or ... 
 It's straigtforward to use.
 
 
-First of all, visit the "About you" tab int the app and tell the app about your climbing history and your goals.
+First of all, visit the "About you" tab int the app and tell the app about your climbing history and your goals. Also, tell the app if you want it to talk to you using the US grading system (5.12 and so on for routes, V5 and such for bouldering) or the French Grading System (6a for routes, 6C+ for boulders).
 
 ![About yourself](https://raw.githubusercontent.com/quintao/climbingcoach/refs/heads/main/assets/images/docs/intro.png)
 

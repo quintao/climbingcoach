@@ -6,36 +6,29 @@ export const ActivityStoreModel = types
   .model("ActivityStore")
   .props({
     log: types.array(ActivityModel),
-    current: types.optional(ActivityModel, {})
+    current: types.optional(ActivityModel, {id: -1})
   })
   .actions(withSetPropAction)
   .actions((store) => ({
     acceptActivity(workout: string) {
-      console.log("Creating workrout!")
       const activity = ActivityModel.create({
         workout: workout,
         creation_date: Date.now(),
         id: Date.now()
       })
       store.current = {...activity};
-      console.log("Workout created")
     },
     completeActivity(comment: string) {
-        console.log("Marking as completed")
         store.current.completion_date = Date.now()
         store.current.feedback = comment
         // Store a copy to avoid buggy references.
         const copy = { ...store.current };
         store.log.push(copy)
         store.current = ActivityModel.create({id: -1})
-        console.log("Workout completed")
-        console.log(store.current)
     },
     cancelActivity() {
-      console.log("Cancel activity")
       store.current.id = -1
       store.current = ActivityModel.create({id: -1})
-      console.log(store.current)
     },
     removeAll() {
         store.log.clear()

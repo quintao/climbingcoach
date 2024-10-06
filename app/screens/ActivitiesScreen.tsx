@@ -10,6 +10,7 @@ import { translate } from "../i18n"
 
 export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
   function ActitiviesScreen(_props) {
+
       const { userBioStore, activityStore } = useStores()
 
       const [confirmationMessage, setConfirmationMessage] = React.useState('');
@@ -36,138 +37,156 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
         setFeedback(text);
       };
 
-    if (activityStore.current.id > 0) {
-      return(
-      <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
-        <Text preset="heading" style={$title} tx="demoActivitiesScreen.currentTrainingTitle"/>
-
-        <View>
-          <Markdown>{activityStore.current.workout}</Markdown>
-        </View>
+      // For some reason we need to force an update here.
+      const [, forceUpdate] = React.useReducer(x => x + 1, 0)
 
 
-        <Text style={{marginTop: 20, marginBottom: 10}} tx="demoActivitiesScreen.currentTrainingFeedback"/>
-        <TextInput
-          multiline={true}
-          numberOfLines={4}
-          onChangeText={handleFeedbackChange}
-          value={feedbackValue}
-          style={textInputStyle}
-          placeholder={translate("demoActivitiesScreen.feedback")}
-          placeholderTextColor="#d6d8da"          
-        /> 
+      const renderScreenWithTrainingPlan = () => {
+        return (
+          <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
+          <Text preset="heading" style={$title} tx="demoActivitiesScreen.currentTrainingTitle"/>
 
-        <View style={{margin: 10}}>
-          <TouchableOpacity
-            style={markAsCompletedStyle}
-            onPress={async () => {
-              activityStore.completeActivity(feedbackValue)
-              handleFeedbackChange('')
-            }}
-          >
-            <Text style={touchableOpacityTextStyle} tx="demoActivitiesScreen.markAsCompleted"/>
-          </TouchableOpacity>
-        </View>        
-      </Screen>
-      )      
-    }
-      
-    return (
-      <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
-        <Text preset="heading" style={$title} tx="demoActivitiesScreen.title" />
+          <View>
+            <Markdown>{activityStore.current.workout}</Markdown>
+          </View>
 
-        <Text style={{marginTop: 20, marginBottom: 10}} tx="demoActivitiesScreen.preferences" />
-        <TextInput
-          multiline={true}
-          numberOfLines={4}
-          onChangeText={handlePreferencesChange}
-          value={preferencesValue}
-          style={textInputStyle}
-          placeholder={translate("demoActivitiesScreen.preferencesPlaceholder")}
-          placeholderTextColor="#d6d8da"
-        />
+          <Text style={{marginTop: 20, marginBottom: 10}} tx="demoActivitiesScreen.currentTrainingFeedback"/>
+          <TextInput
+            multiline={true}
+            numberOfLines={4}
+            onChangeText={handleFeedbackChange}
+            value={feedbackValue}
+            style={textInputStyle}
+            placeholder={translate("demoActivitiesScreen.feedback")}
+            placeholderTextColor="#d6d8da"          
+          /> 
 
-        <View style={{margin: 10}}>
-          <TouchableOpacity 
-            style={touchableOpacityStyle}           
-            onPress={async () => {
-              handleConfirmationMessageChange("")                
-
-              if (userBioStore.bioInfo.history == '' || userBioStore.bioInfo.goals == '') {
-                handleConfirmationMessageChange(translate("demoActivitiesScreen.validateHistoryGoals"))
-                return;
-              }
-
-              handleTrainingChange('')
-              handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
-              const activities = activityStore.listOfActivities;
-              const training  = await GenerateTraining(
-                userBioStore.bioInfo.history,
-                userBioStore.bioInfo.goals,
-                userBioStore.bioInfo.injuries,
-                userBioStore.bioInfo.french_grading,
-                activities, preferencesValue);
-                handleConfirmationMessageChange("")                
-                handleTrainingChange(training);
-            }}
-          ><Text style={touchableOpacityTextStyle} tx="demoActivitiesScreen.suggestTraining"/></TouchableOpacity>
-        </View>
-
-      <View>
-        <Text>{confirmationMessage}</Text>
-      </View>
-
-
-      <View>
-        <Markdown>{trainingValue}</Markdown>
-        {trainingValue ? (
-          <>
-          <View style={{margin: 25}}>
+          <View style={{margin: 10}}>
             <TouchableOpacity
-              style={acceptTrainingStyle}           
+              style={markAsCompletedStyle}
               onPress={async () => {
-                activityStore.acceptActivity(trainingValue)
-                setTraining('')
-              }}            
+                activityStore.completeActivity(feedbackValue)
+                handleFeedbackChange('')
+              }}
             >
-            <Text style={touchableOpacityTextStyle} tx={"demoActivitiesScreen.acceptTraining"}/>
+              <Text style={touchableOpacityTextStyle} tx="demoActivitiesScreen.markAsCompleted"/>
             </TouchableOpacity>
-            
-            <View style={{margin: 20}}>
-              <Text tx={"demoActivitiesScreen.adaptItLabel"}/>
+          </View> 
+
+          <View style={{margin: 10}}>
+            <TouchableOpacity
+              style={cancelActivityStyle}
+              onPress={async () => {
+                await activityStore.cancelActivity()
+                forceUpdate()                
+              }}
+            >
+              <Text style={touchableCancelActivityOpacityTextStyle} tx="demoActivitiesScreen.cancelTrainingPlan"/>
+            </TouchableOpacity>
+          </View>         
+        </Screen>
+        )
+      }
+
+      const renderForm = () => {
+        return (      
+          <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
+            <Text preset="heading" style={$title} tx="demoActivitiesScreen.title" />
+
+            <Text style={{marginTop: 20, marginBottom: 10}} tx="demoActivitiesScreen.preferences" />
+            <TextInput
+              multiline={true}
+              numberOfLines={4}
+              onChangeText={handlePreferencesChange}
+              value={preferencesValue}
+              style={textInputStyle}
+              placeholder={translate("demoActivitiesScreen.preferencesPlaceholder")}
+              placeholderTextColor="#d6d8da"
+            />
+
+            <View style={{margin: 10}}>
+              <TouchableOpacity 
+                style={touchableOpacityStyle}           
+                onPress={async () => {
+                  handleConfirmationMessageChange("")                
+
+                  if (userBioStore.bioInfo.history == '' || userBioStore.bioInfo.goals == '') {
+                    handleConfirmationMessageChange(translate("demoActivitiesScreen.validateHistoryGoals"))
+                    return;
+                  }
+
+                  handleTrainingChange('')
+                  handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
+                  const activities = activityStore.listOfActivities;
+                  const training  = await GenerateTraining(
+                    userBioStore.bioInfo.history,
+                    userBioStore.bioInfo.goals,
+                    userBioStore.bioInfo.injuries,
+                    userBioStore.bioInfo.french_grading,
+                    activities, preferencesValue);
+                    handleConfirmationMessageChange("")                
+                    handleTrainingChange(training);
+                }}
+              ><Text style={touchableOpacityTextStyle} tx="demoActivitiesScreen.suggestTraining"/></TouchableOpacity>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-              <Text tx={"demoActivitiesScreen.makeEasier"}/>
-              <TouchableOpacity style={controlButtons}
-               onPress={async () => {
-                handleTrainingChange('')
-                handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
-                const training  = await MakeItEasier(trainingValue);
-                handleConfirmationMessageChange("")                
-                handleTrainingChange(training);
-              }}>
-                <Text>-</Text>
-              </TouchableOpacity>
-              <Text>x</Text>              
-              <TouchableOpacity style={controlButtons}
-               onPress={async () => {
-                handleTrainingChange('')
-                handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
-                const training  = await MakeItHarder(trainingValue);
-                handleConfirmationMessageChange("")                
-                handleTrainingChange(training);
-              }}>
-                <Text>+</Text>
-              </TouchableOpacity>
-              <Text tx={"demoActivitiesScreen.makeHarder"}/>         
-            </View>            
-          </View>            
-          </>) : <></>}        
-      </View>
 
+          <View>
+            <Text>{confirmationMessage}</Text>
+          </View>
 
-      </Screen>
-    )
+          <View>
+            <Markdown>{trainingValue}</Markdown>
+            {trainingValue ? (
+              <>
+              <View style={{margin: 25}}>
+                <TouchableOpacity
+                  style={acceptTrainingStyle}           
+                  onPress={async () => {
+                    activityStore.acceptActivity(trainingValue)
+                    setTraining('')
+                  }}            
+                >
+                <Text style={touchableOpacityTextStyle} tx={"demoActivitiesScreen.acceptTraining"}/>
+                </TouchableOpacity>
+                
+                <View style={{margin: 20}}>
+                  <Text tx={"demoActivitiesScreen.adaptItLabel"}/>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                  <Text tx={"demoActivitiesScreen.makeEasier"}/>
+                  <TouchableOpacity style={controlButtons}
+                  onPress={async () => {
+                    handleTrainingChange('')
+                    handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
+                    const training  = await MakeItEasier(trainingValue);
+                    handleConfirmationMessageChange("")                
+                    handleTrainingChange(training);
+                  }}>
+                    <Text>-</Text>
+                  </TouchableOpacity>
+                  <Text>x</Text>              
+                  <TouchableOpacity style={controlButtons}
+                  onPress={async () => {
+                    handleTrainingChange('')
+                    handleConfirmationMessageChange(translate("demoActivitiesScreen.generatingTraining"))
+                    const training  = await MakeItHarder(trainingValue);
+                    handleConfirmationMessageChange("")                
+                    handleTrainingChange(training);
+                  }}>
+                    <Text>+</Text>
+                  </TouchableOpacity>
+                  <Text tx={"demoActivitiesScreen.makeHarder"}/>         
+                </View>            
+              </View>            
+              </>) : <></>}        
+          </View>
+          </Screen>)
+        }
+
+      if (activityStore.current.id < 0 ) {
+        return renderForm()
+      }
+      return renderScreenWithTrainingPlan()
   }
 
 const $container: ViewStyle = {
@@ -210,6 +229,11 @@ const touchableOpacityTextStyle = {
   fontWeight: "bold",
 };
 
+const touchableCancelActivityOpacityTextStyle = {
+  color: "#FFF", // White text
+  fontSize: 13,
+  fontWeight: "bold",
+};
 
 const acceptTrainingStyle = {
   backgroundColor: "#ff7a66",
@@ -233,6 +257,18 @@ const markAsCompletedStyle = {
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.2,
   shadowRadius: 2,
+};
+
+const cancelActivityStyle = {
+  backgroundColor: "#cfd1d4",
+  borderRadius: 15,
+  padding: 5,
+  justifyContent: "center",
+  alignItems: "center",
+  shadowColor: "#DDD",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 1.0,
+  shadowRadius: 2,  
 };
 
 const controlButtons = {

@@ -137,13 +137,6 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
               size="xxs"
               accessibilityLabel={"whatever"}
             >
-              {formatted_creation_date}
-            </Text>
-            <Text
-              style={$metadataText}
-              size="xxs"
-              accessibilityLabel={"whatever"}
-            >
               {completed}
             </Text>
           </View>

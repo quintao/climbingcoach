@@ -27,10 +27,15 @@ export const ActivityStoreModel = types
         // Store a copy to avoid buggy references.
         const copy = { ...store.current };
         store.log.push(copy)
-        store.current.id = -1
-        store.current = {}
+        store.current = ActivityModel.create({id: -1})
         console.log("Workout completed")
         console.log(store.current)
+    },
+    cancelActivity() {
+      console.log("Cancel activity")
+      store.current.id = -1
+      store.current = ActivityModel.create({id: -1})
+      console.log(store.current)
     },
     removeAll() {
         store.log.clear()

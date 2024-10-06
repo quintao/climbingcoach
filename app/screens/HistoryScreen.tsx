@@ -23,9 +23,9 @@ import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
 import { delay } from "../utils/delay"
 
-const rnrImage1 = require("../../assets/images/demo/rnr-image-1.png")
-const rnrImage2 = require("../../assets/images/demo/rnr-image-2.png")
-const rnrImage3 = require("../../assets/images/demo/rnr-image-3.png")
+const rnrImage1 = require("../../assets/images/demo/aititude-image-1.png")
+const rnrImage2 = require("../../assets/images/demo/aititude-image-2.png")
+const rnrImage3 = require("../../assets/images/demo/aititude-image-3.png")
 const rnrImages = [rnrImage1, rnrImage2, rnrImage3]
 
 
@@ -101,7 +101,10 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
   }) {
  
     const imageUri = useMemo<ImageSourcePropType>(() => {
-      return rnrImages[Math.floor(Math.random() * rnrImages.length)]
+      console.log()
+      const index = Math.floor(Math.random() * rnrImages.length)
+      console.log(index)
+      return rnrImages[index]
     }, [])
   
   

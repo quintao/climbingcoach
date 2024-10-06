@@ -84,6 +84,7 @@ const en = {
     acceptTraining: "Let's do this!",
     suggestTraining: "Suggest training",
     markAsCompleted: "Mark as completed",
+    cancelTrainingPlan: "Cancel training plan",
     adaptItLabel: "Adapt it",
     makeEasier: "Easier",
     makeHarder: "Harder"

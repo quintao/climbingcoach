@@ -183,7 +183,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           </Screen>)
         }
 
-      if (activityStore.current.id < 0 ) {
+      if (activityStore.current.id <= 0 ) {
         return renderForm()
       }
       return renderScreenWithTrainingPlan()

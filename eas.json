@@ -15,8 +15,11 @@
     },
     "production": {
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle"    
       }
     }
+  },
+  "cli": {
+    "appVersionSource": "remote"
   }
 }

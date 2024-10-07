@@ -99,9 +99,7 @@ function build_one_activity(activity: any) {
   }
 
   export async function MakeItEasier(workout: string) {
-    
     let prompt = []
-      
     const intro = "You're a climbing coach; You generated the training below but the climber found it too hard. Make it a little bit easier."
     prompt.push(intro)
     prompt.push(workout)
@@ -113,10 +111,8 @@ function build_one_activity(activity: any) {
   }
 
   export async function MakeItHarder(workout: string) {
-    
     let prompt = []
-      
-    const intro = "You're a climbing coach; You generated the training below but the climber found it too hard. Make it a little bit harder."
+    const intro = "You're a climbing coach; You generated the training below but the climber found it too easy. Make it a little bit harder."
     prompt.push(intro)
     prompt.push(workout)
     prompt.push(`You should only provide the workout plan, and no other information, introduction, etc")

@@ -327,6 +327,12 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     if (workout.completion_date > 0) {
       completed = translate("historyScreen.completed") +  ' ' + new Date(workout.completion_date).toLocaleDateString()
     }
+
+    let feedback = workout.feedback
+    const MAX_FEEDBACK_LENGTH = 50
+    if (feedback.length > MAX_FEEDBACK_LENGTH) {
+      feedback = feedback.slice(0, MAX_FEEDBACK_LENGTH) + "..."
+    }
   
     return (
       <Card
@@ -349,7 +355,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
         FooterComponent={
           <View>
             {workout.feedback != '' ? (
-              <Text style={$metadataText} size="xxs">{workout.feedback}</Text>
+              <Text style={$metadataText} size="xxs">{feedback}</Text>
             ) : (<></>        
             )}
           </View>

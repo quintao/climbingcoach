@@ -34,6 +34,7 @@
     "@expo/metro-runtime": "~3.2.1",
     "@google/generative-ai": "^0.17.1",
     "@react-native-async-storage/async-storage": "1.21.0",
+    "@react-native-community/datetimepicker": "8.0.1",
     "@react-navigation/bottom-tabs": "^6.3.2",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.0.2",

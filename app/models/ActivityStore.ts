@@ -32,7 +32,17 @@ export const ActivityStoreModel = types
     },
     removeAll() {
         store.log.clear()
-    }
+    },
+    addActivityManually(workout: string, feedback: string, when: Date) {
+      const activity = ActivityModel.create({
+        workout: workout,
+        feedback: feedback,
+        id: when.getTime(),
+        completion_date: when.getTime(),
+        creation_date: Date.now(),
+      })
+      store.log.push(activity)
+    },
   }))
   .views((store) => ({
     get listOfActivities() {

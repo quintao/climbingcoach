@@ -117,7 +117,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     const renderDetailedCard = () => {
       return (
         <Screen
-          preset="fixed"
+          preset="scroll"
           safeAreaEdges={["top"]}
           contentContainerStyle={$containerLogScreen}
         >

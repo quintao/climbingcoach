@@ -65,8 +65,13 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
             <TouchableOpacity
               style={markAsCompletedStyle}
               onPress={async () => {
+                if (feedbackValue.length < 15) {
+                  handleConfirmationMessageChange(translate("demoActivitiesScreen.provideMeaningfulFeedback"))                
+                  return;
+                }
                 activityStore.completeActivity(feedbackValue)
                 handleFeedbackChange('')
+                handleConfirmationMessageChange('')
               }}
             >
               <Text style={touchableOpacityTextStyle} tx="demoActivitiesScreen.markAsCompleted"/>
@@ -78,12 +83,19 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
               style={cancelActivityStyle}
               onPress={async () => {
                 await activityStore.cancelActivity()
+                handleFeedbackChange('')
+                handleConfirmationMessageChange('')
                 forceUpdate()                
               }}
             >
               <Text style={touchableCancelActivityOpacityTextStyle} tx="demoActivitiesScreen.cancelTrainingPlan"/>
             </TouchableOpacity>
-          </View>         
+          </View>
+
+          <View>
+            <Text>{confirmationMessage}</Text>
+          </View>
+
         </Screen>
         )
       }
@@ -197,7 +209,6 @@ const $container: ViewStyle = {
 const $title: TextStyle = {
   marginBottom: spacing.sm,
 }
-
 
 const textInputStyle = {
   fontSize: 16,

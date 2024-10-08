@@ -7,7 +7,7 @@ import {
   TextStyle,
   View,
   ViewStyle,
-  TouchableOpacity
+  TouchableOpacity, TextInput
 } from "react-native"
 import { type ContentStyle } from "@shopify/flash-list"
 import {
@@ -15,6 +15,7 @@ import {
   ListView,
   Screen,
   Text,
+  Icon
 } from "../components"
 import { translate } from "../i18n"
 import { useStores } from "../models"
@@ -22,6 +23,9 @@ import { Activity } from "../models/Activity"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { colors, spacing } from "../theme"
 import { delay } from "../utils/delay"
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Markdown from 'react-native-markdown-display';
+
 
 const rnrImage1 = require("../../assets/images/demo/aititude-image-1.png")
 const rnrImage2 = require("../../assets/images/demo/aititude-image-2.png")
@@ -34,16 +38,223 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     const { activityStore } = useStores()
     const [refreshing, setRefreshing] = React.useState(false)
 
+    // For logging an activity manually.
+    const [showModal, setShowModal] = React.useState(false)
+    const [whatDidYouDo, setWhatDidYouDo] = React.useState("")
+    const [howDidyouFeel, setHowDidYouFeel] = React.useState("")
+    const [date, setDate] = React.useState(new Date());
+    const [show, setShow] = React.useState(false);
+    const [mode, setMode] = React.useState('date');
+    const [errorMessage, setErrorMessage] = React.useState("")
+
+    // For showing the modal with the workout.
+    const [detailedTraining, setDetailedTraining] = React.useState({})
+
+
+    function handleWhatDidYouDo(text: string) {
+      setWhatDidYouDo(text)
+      setErrorMessage('')
+    }
+
+    function handleHowDidYouFeel(text: string) {
+      setHowDidYouFeel(text)
+      setErrorMessage('')
+    }
+
+    // Hooks for the date picker.
+    const onChange = (event: any, selectedDate: any) => {
+      const currentDate = selectedDate;
+      setShow(false);
+      setDate(currentDate);
+    };
+  
+    const showMode = (currentMode: string) => {
+      setShow(true);
+      setMode('date');
+    };
+  
+    const showDatepicker = () => {
+      showMode('date');
+      setErrorMessage('')
+    };
+
     async function manualRefresh() {
       setRefreshing(true)
       await Promise.all([activityStore.listOfActivities, delay(750)])
       setRefreshing(false)
     }
 
+    // The activity logs to show on the screen.
     let data = activityStore.listOfActivities.slice()
-    data.sort((a, b) => b.creation_date - a.creation_date);
+    data.sort((a, b) => b.completion_date - a.completion_date);
+
+    const logActivityByHand = () => {
+        return (        
+          <View style={{paddingTop: 5, backgroundColor: 'transparent', margin: 5, alignItems: 'flex-end'}}>
+            <TouchableOpacity
+              onPress={async () => {
+                setShowModal(true)
+              }}
+            >
+              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <Text tx="historyScreen.logManually"/>
+                <Icon icon="menu" style={{marginLeft: 5}}/>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )
+    }
+
+    function cleanState() {
+      setWhatDidYouDo('')
+      setHowDidYouFeel('')
+      setErrorMessage('')
+      setDate(new Date())
+      setShowModal(false)
+    }
 
 
+    // The modal screen.
+    if (showModal) {
+      return (
+        <Screen
+          preset="fixed"
+          safeAreaEdges={["top"]}
+          contentContainerStyle={$containerLogScreen}
+        >
+           <View>
+            <Text style={{marginTop: 20, marginBottom: 10}} tx="historyScreen.whatDidYouDo"/>
+              <TextInput
+                multiline={true}
+                numberOfLines={4}
+                onChangeText={handleWhatDidYouDo}
+                value={whatDidYouDo}
+                style={textInputStyle}
+                placeholder={translate("historyScreen.whatDidYouDoPlaceholder")}
+                placeholderTextColor="#d6d8da"          
+              />
+            <Text style={{marginTop: 20, marginBottom: 10}} tx="historyScreen.howDidYouFeel"/>
+              <TextInput
+                multiline={true}
+                numberOfLines={4}
+                onChangeText={handleHowDidYouFeel}
+                value={howDidyouFeel}
+                style={textInputStyle}
+                placeholder={translate("historyScreen.howDidYouFeelPlaceholder")}
+                placeholderTextColor="#d6d8da"          
+              />
+
+            <Text style={{marginTop: 20, marginBottom: 10}} tx="historyScreen.selectADate"/>
+
+              <TouchableOpacity onPress={showDatepicker}>
+                <TextInput
+                  multiline={false}
+                  editable={false}
+                  style={textInputStyle}
+                  value={date.toDateString()}>                
+                </TextInput>
+              </TouchableOpacity>
+          
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={mode}
+                  is24Hour={true}
+                  onChange={onChange}
+                />
+              )}
+
+              <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+
+                <TouchableOpacity style={{padding: 10, backgroundColor: '#76a388', borderRadius: 10}}
+                    onPress={async () => {
+                      if (whatDidYouDo.length < 30 || howDidyouFeel.length < 10) {
+                        setErrorMessage(translate("historyScreen.provideMeaningfulDescriptionOfTheTrainingAndHowYouFeel"))
+                        return;
+                      }
+                      const now = Date.now()
+                      if (date.getTime() > now) {
+                        setErrorMessage(translate("historyScreen.noTrainingInFuture"))
+                        return;
+                      }
+                      activityStore.addActivityManually(whatDidYouDo, howDidyouFeel, date)
+                      cleanState()
+                    }}
+                  >
+                  <Text style={touchableOpacityTextStyle}>Save</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={{padding: 10, backgroundColor: '#ff7a66', borderRadius: 10, marginLeft: 10}}
+                    onPress={async () => {
+                      cleanState()
+                    }}
+                  >
+                    <Text style={touchableOpacityTextStyle}>Cancel</Text>
+                  </TouchableOpacity>
+
+              </View>
+
+              <Text>{errorMessage}</Text>
+
+           </View>
+        </Screen>
+      )
+    }
+
+    const renderDetailedCard = () => {
+      return (
+        <Screen
+          preset="fixed"
+          safeAreaEdges={["top"]}
+          contentContainerStyle={$containerLogScreen}
+        >
+
+          <View style={$heading}>
+            <View>
+              <Text preset="heading" tx="historyScreen.detailedTrainingTitle"/>
+            </View>
+          </View>
+
+          <View style={{flexDirection: 'row', marginBottom: 20}}>
+            <Text tx="historyScreen.detailedTrainingDate"/>
+            <Text>: </Text>
+            <Text>{new Date(detailedTraining.completion_date).toLocaleDateString()}</Text>
+          </View>
+
+          <View>
+            <Text style={{marginBottom: 10}} tx="historyScreen.detailedTrainingDescription"/>
+            <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
+              <Markdown>{detailedTraining.workout}</Markdown>
+            </View>
+          </View>
+
+          <View>
+            <Text style={{marginVertical: 10}} tx="historyScreen.detailedTrainingFeedback"/>
+            <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
+              <Text>{detailedTraining.feedback}</Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={{marginVertical: 20}}
+            onPress={()=> setDetailedTraining({})}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon icon="back" color='gray' style={{margin: 5}}/>                  
+                <Text>Back</Text>
+              </View>
+          </TouchableOpacity>
+        </Screen>
+    
+      )
+    }
+
+    if (detailedTraining["id"] > 0) {
+      return renderDetailedCard()
+    }
+
+
+    // The regular screen.
     return (
         <Screen
           preset="fixed"
@@ -65,12 +276,13 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
                 <View>
                   {data.length == 0 && <Text tx="historyScreen.emptyActivities"/>}
                 </View>
+                { logActivityByHand() }
               </View>
             }
             renderItem={({ item }) => (
               <WorkoutCard
                 workout={item}
-                onPressFavorite={() => {}}
+                onPressFavorite={() => {setDetailedTraining(item)}}
               />
             )}
             ListFooterComponent={
@@ -81,7 +293,10 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
                     activityStore.removeAll()
                   }}
                 >
-                <Text>Delete all</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Icon icon="bell" color='gray' style={{margin: 5}}/>                  
+                  <Text style={{color: 'gray'}} tx="historyScreen.deleteAllTrainings"/>
+                </View>
               </TouchableOpacity>
               }
             </View>
@@ -101,23 +316,13 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
   }) {
  
     const imageUri = useMemo<ImageSourcePropType>(() => {
-      console.log()
       const index = Math.floor(Math.random() * rnrImages.length)
-      console.log(index)
       return rnrImages[index]
     }, [])
   
-  
-    const handlePressFavorite = () => {
-      // console.log("marking as completed.")
-      // onPressFavorite()      
-    }
-  
     const handlePressCard = () => {
+      onPressFavorite()      
     }
-
-    const creation_date = new Date(workout.creation_date);
-    const formatted_creation_date = creation_date.toLocaleDateString();
 
     let completed = translate("historyScreen.notCompletedYet")
     if (workout.completion_date > 0) {
@@ -129,7 +334,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
         style={$item}
         verticalAlignment="force-footer-bottom"
         onPress={handlePressCard}
-        onLongPress={handlePressFavorite}
+        onLongPress={handlePressCard}
         HeadingComponent={
           <View style={$metadata}>
             <Text
@@ -154,10 +359,25 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     )
   })
 
-
+const textInputStyle = {
+    fontSize: 16,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "#FFF", // White background
+    shadowColor: "#DDD",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2, // Adds a subtle shadow
+    marginBottom: 20,
+  };
 
 const $screenContentContainer: ViewStyle = {
   flex: 1,
+}
+
+const $containerLogScreen: ViewStyle = {
+  paddingTop: spacing.lg + spacing.xl,
+  paddingHorizontal: spacing.lg
 }
 
 const $listContentContainer: ContentStyle = {
@@ -167,7 +387,7 @@ const $listContentContainer: ContentStyle = {
 }
 
 const $heading: ViewStyle = {
-  marginBottom: spacing.md,
+  marginBottom: spacing.md
 }
 
 const $item: ViewStyle = {
@@ -193,6 +413,12 @@ const $metadataText: TextStyle = {
   marginEnd: spacing.md,
   marginBottom: spacing.xs,
 }
+
+const touchableOpacityTextStyle = {
+  color: "#FFF", // White text
+  fontSize: 16,
+  fontWeight: "bold",
+};
 
 
 // #endregion

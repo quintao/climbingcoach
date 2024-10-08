@@ -50,6 +50,9 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     // For showing the modal with the workout.
     const [detailedTraining, setDetailedTraining] = React.useState({})
 
+    // To handle the management of settings
+    const [expandSettings, setExpandSettings] = React.useState(false);
+
     function handleWhatDidYouDo(text: string) {
       setWhatDidYouDo(text)
       setErrorMessage('')
@@ -105,6 +108,46 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
         )
     }
 
+    // renders the button to log activities by hand.
+    const manageActivityLogs = () => {
+      return (        
+        <View style={{margin: 10}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity  style={{flexDirection: 'row', alignItems: 'center'}}
+                 onPress={()=>setExpandSettings(!expandSettings)}>
+              <Icon icon="settings" color='gray' style={{margin: 5}}/>                  
+              <Text style={{color: 'gray'}}>Manage your logs</Text>
+            </TouchableOpacity>
+          </View>
+
+          {expandSettings &&
+          <View style={{marginLeft: 10}}>
+            <TouchableOpacity
+              onPress={async () => {
+                activityStore.removeAll()
+                setExpandSettings(false)
+              }}
+            >
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon icon="bell" color='gray' style={{margin: 5}} size={15}/>                  
+                <Text size="xxs" style={{color: 'gray'}} tx="historyScreen.deleteAllTrainings"/>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={async () => {}}
+            >
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon icon="lock" color='gray' style={{margin: 5}} size={15}/>                  
+                <Text size="xxs" style={{color: 'gray'}} tx="historyScreen.downloadYourData"/>
+              </View>
+            </TouchableOpacity>            
+          </View>
+          }
+      </View>
+      )
+    }
+
     function cleanState() {
       setWhatDidYouDo('')
       setHowDidYouFeel('')
@@ -137,7 +180,11 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
           <View>
             <Text style={{marginBottom: 10}} tx="historyScreen.detailedTrainingDescription"/>
             <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
-              <Markdown>{detailedTraining.workout}</Markdown>
+              <Markdown
+                style={{
+                  body: {fontSize: 14, fontFamily: "spaceGroteskLight" }
+                }}
+              >{detailedTraining.workout}</Markdown>
             </View>
           </View>
 
@@ -285,20 +332,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
               />
             )}
             ListFooterComponent={
-              <View style={{margin: 10}}>
-              {data.length > 0 &&
-                <TouchableOpacity
-                  onPress={async () => {
-                    activityStore.removeAll()
-                  }}
-                >
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Icon icon="bell" color='gray' style={{margin: 5}}/>                  
-                  <Text style={{color: 'gray'}} tx="historyScreen.deleteAllTrainings"/>
-                </View>
-              </TouchableOpacity>
-              }
-            </View>
+              manageActivityLogs()
             }
           />
 

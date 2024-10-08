@@ -104,6 +104,7 @@ const en = {
     noTrainingInFuture: "You cannot log a training in the future :)",
     provideMeaningfulDescriptionOfTheTrainingAndHowYouFeel: "Please provide a meaningful description and how you felt after the training",
     deleteAllTrainings: "Delete everything",
+    downloadYourData: "Download training data (not implemented)",
     detailedTrainingTitle: "Your selected training",
     detailedTrainingDate: "Date",
     detailedTrainingDescription: "The description of the training",

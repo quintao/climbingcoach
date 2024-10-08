@@ -47,7 +47,11 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           <Text preset="heading" style={$title} tx="demoActivitiesScreen.currentTrainingTitle"/>
 
           <View>
-            <Markdown>{activityStore.current.workout}</Markdown>
+            <Markdown
+              style={{
+                body: {fontSize: 14, fontFamily: "spaceGroteskLight" }
+              }}
+            >{activityStore.current.workout}</Markdown>
           </View>
 
           <Text style={{marginTop: 20, marginBottom: 10}} tx="demoActivitiesScreen.currentTrainingFeedback"/>
@@ -147,7 +151,12 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           </View>
 
           <View>
-            <Markdown>{trainingValue}</Markdown>
+            <Markdown
+              style={{
+                body: {fontSize: 14, fontFamily: "spaceGroteskLight" }
+              }}>
+                {trainingValue}
+            </Markdown>
             {trainingValue ? (
               <>
               <View style={{margin: 25}}>

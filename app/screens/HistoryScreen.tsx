@@ -50,7 +50,6 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     // For showing the modal with the workout.
     const [detailedTraining, setDetailedTraining] = React.useState({})
 
-
     function handleWhatDidYouDo(text: string) {
       setWhatDidYouDo(text)
       setErrorMessage('')
@@ -88,6 +87,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     let data = activityStore.listOfActivities.slice()
     data.sort((a, b) => b.completion_date - a.completion_date);
 
+    // renders the button to log activities by hand.
     const logActivityByHand = () => {
         return (        
           <View style={{paddingTop: 5, backgroundColor: 'transparent', margin: 5, alignItems: 'flex-end'}}>
@@ -113,6 +113,53 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
       setShowModal(false)
     }
 
+    // Renders a modal screen with the detailed information about a past training.
+    const renderDetailedCard = () => {
+      return (
+        <Screen
+          preset="fixed"
+          safeAreaEdges={["top"]}
+          contentContainerStyle={$containerLogScreen}
+        >
+
+          <View style={$heading}>
+            <View>
+              <Text preset="heading" tx="historyScreen.detailedTrainingTitle"/>
+            </View>
+          </View>
+
+          <View style={{flexDirection: 'row', marginBottom: 20}}>
+            <Text tx="historyScreen.detailedTrainingDate"/>
+            <Text>: </Text>
+            <Text>{new Date(detailedTraining.completion_date).toLocaleDateString()}</Text>
+          </View>
+
+          <View>
+            <Text style={{marginBottom: 10}} tx="historyScreen.detailedTrainingDescription"/>
+            <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
+              <Markdown>{detailedTraining.workout}</Markdown>
+            </View>
+          </View>
+
+          <View>
+            <Text style={{marginVertical: 10}} tx="historyScreen.detailedTrainingFeedback"/>
+            <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
+              <Text>{detailedTraining.feedback}</Text>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={{marginVertical: 20}}
+            onPress={()=> setDetailedTraining({})}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon icon="back" color='gray' style={{margin: 5}}/>                  
+                <Text>Back</Text>
+              </View>
+          </TouchableOpacity>
+        </Screen>
+    
+      )
+    }
 
     // The modal screen.
     if (showModal) {
@@ -202,57 +249,9 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
       )
     }
 
-    const renderDetailedCard = () => {
-      return (
-        <Screen
-          preset="fixed"
-          safeAreaEdges={["top"]}
-          contentContainerStyle={$containerLogScreen}
-        >
-
-          <View style={$heading}>
-            <View>
-              <Text preset="heading" tx="historyScreen.detailedTrainingTitle"/>
-            </View>
-          </View>
-
-          <View style={{flexDirection: 'row', marginBottom: 20}}>
-            <Text tx="historyScreen.detailedTrainingDate"/>
-            <Text>: </Text>
-            <Text>{new Date(detailedTraining.completion_date).toLocaleDateString()}</Text>
-          </View>
-
-          <View>
-            <Text style={{marginBottom: 10}} tx="historyScreen.detailedTrainingDescription"/>
-            <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
-              <Markdown>{detailedTraining.workout}</Markdown>
-            </View>
-          </View>
-
-          <View>
-            <Text style={{marginVertical: 10}} tx="historyScreen.detailedTrainingFeedback"/>
-            <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
-              <Text>{detailedTraining.feedback}</Text>
-            </View>
-          </View>
-
-          <TouchableOpacity
-            style={{marginVertical: 20}}
-            onPress={()=> setDetailedTraining({})}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icon icon="back" color='gray' style={{margin: 5}}/>                  
-                <Text>Back</Text>
-              </View>
-          </TouchableOpacity>
-        </Screen>
-    
-      )
-    }
-
     if (detailedTraining["id"] > 0) {
       return renderDetailedCard()
     }
-
 
     // The regular screen.
     return (

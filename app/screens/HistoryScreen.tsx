@@ -7,7 +7,7 @@ import {
   TextStyle,
   View,
   ViewStyle,
-  TouchableOpacity, TextInput
+  TouchableOpacity, TextInput, Platform
 } from "react-native"
 import { type ContentStyle } from "@shopify/flash-list"
 import {
@@ -25,6 +25,8 @@ import { colors, spacing } from "../theme"
 import { delay } from "../utils/delay"
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Markdown from 'react-native-markdown-display';
+import {shareAsync} from 'expo';
+import * as FileSystem from 'expo-file-system'
 
 
 const rnrImage1 = require("../../assets/images/demo/aititude-image-1.png")
@@ -108,6 +110,34 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
         )
     }
 
+    async function saveFile() {
+      const directory = FileSystem.cacheDirectory;
+      const path = directory + "/activities.json"
+      if (Platform.OS === "android") {
+        const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+    
+        if (permissions.granted) {
+          await FileSystem.StorageAccessFramework.createFileAsync(permissions.directoryUri, "activities.json", "text")
+            .then(async (path) => {
+              await FileSystem.writeAsStringAsync(path, JSON.stringify(activityStore.log), { encoding: FileSystem.EncodingType.UTF8 });
+            })
+            .catch(e => console.log(e));
+        } else {
+          shareAsync(path);
+        }
+      } else {
+        shareAsync(path);
+      }
+    }    
+
+    const downloadJSON = async () => {
+      try {
+        saveFile()
+      } catch (error) {
+        console.error('Error downloading file:', error);
+      }
+    };    
+
     // renders the button to log activities by hand.
     const manageActivityLogs = () => {
       return (        
@@ -135,7 +165,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={async () => {}}
+              onPress={async () => {downloadJSON()}}
             >
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Icon icon="lock" color='gray' style={{margin: 5}} size={15}/>                  

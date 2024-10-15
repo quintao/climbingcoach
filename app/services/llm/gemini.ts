@@ -22,12 +22,9 @@ function build_one_activity(activity: any, index: number) {
   }
 
   export async function GenerateTraining(history: string, goals: string, injuries: string, french_grading: boolean, activities: any, preferences: string) {
-    
     let prompt = []
-      
     const today = "Today is " + new Date().toDateString()
     prompt.push(today)
-
 
     const intro = "You're a climbing coach; you should help a rock climber who's trying to improve their climbing skills."
     prompt.push(intro)
@@ -54,7 +51,7 @@ function build_one_activity(activity: any, index: number) {
         prompt.push(what_to_achieve)
     }
     
-    const three_weeks_ago = Date.now() - (7 * 24 * 60 * 60 * 1000)
+    const three_weeks_ago = Date.now() - (21 * 24 * 60 * 60 * 1000)
  
     if (activities.length > 0) {
       let recent_activities_list = []

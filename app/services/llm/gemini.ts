@@ -14,7 +14,7 @@ function build_one_activity(activity: any, index: number) {
   }
   
   async function generate(prompt: string) {
-    const apiKey = ""
+    const apiKey = "AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ"
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
@@ -79,13 +79,13 @@ function build_one_activity(activity: any, index: number) {
     }
   
     if (preferences) {
-
       prompt.push("\n\nFor today, these are the preferences of the climber: \"" + preferences + "\"")
       prompt.push(`You should respect the preferences of the climber, especially if they talk about duration of the workout, and if the climber mentioned being tired.
         If the climber mentions that they want to do a sport that is different from climbing, you should make sure that this sport does not negatively impact the climbing fitness of the climber.`)
     }
     
     const target = `The workout should be aligned with the goal of the climber, the preferences for today's session, the CONTEXT and HISTORY of the climber, current injuries if they are mentioned, and the feedback provided by the climber for the last workouts.
+    As a rule of thumb, the workouts should not be very hard. It's better to err on the side of having something fun and easier.
 
     The workout plan should consist of the following information:
     A section called "Goals for this session": in this section, you should explain the goals behind the training that you suggested. It should be short and straight to the point.

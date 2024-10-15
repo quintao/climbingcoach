@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite"
 import React, { FC, useMemo } from "react"
 import {
+  Alert,
   Image,
   ImageSourcePropType,
   ImageStyle,
@@ -137,7 +138,26 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
       } catch (error) {
         console.error('Error downloading file:', error);
       }
-    };    
+    };
+    
+    const confirmationButton = () => {
+      Alert.alert(
+        translate("historyScreen.deleteMessage"),
+        translate("historyScreen.continueWithDeletion"),
+        [
+          {text: translate("historyScreen.cancel"),
+            onPress: () => console.log("cancel"),
+            style: 'Cancel'
+          },
+          {text: translate("historyScreen.continue"),
+            onPress: () => {{
+              activityStore.removeAll()
+              setExpandSettings(false)
+            }},
+          },
+        ]
+      )
+    }
 
     // renders the button to log activities by hand.
     const manageActivityLogs = () => {
@@ -154,10 +174,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
           {expandSettings &&
           <View style={{marginLeft: 10}}>
             <TouchableOpacity
-              onPress={async () => {
-                activityStore.removeAll()
-                setExpandSettings(false)
-              }}
+              onPress={async () => confirmationButton()}
             >
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Icon icon="bell" color='gray' style={{margin: 5}} size={15}/>                  
@@ -196,7 +213,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
                 }}
               >
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icon icon="lock" color='gray' style={{margin: 5}} size={15}/>                  
+                <Icon icon="menu" color='gray' style={{margin: 5}} size={15}/>                  
                 <Text size="xxs" style={{color: 'gray'}} tx="historyScreen.uploadYourData"/>
               </View>
             </TouchableOpacity>

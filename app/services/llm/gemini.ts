@@ -14,7 +14,7 @@ function build_one_activity(activity: any, index: number) {
   }
   
   async function generate(prompt: string) {
-    const apiKey = ""
+    const apiKey = "AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ"
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
@@ -54,7 +54,7 @@ function build_one_activity(activity: any, index: number) {
         prompt.push(what_to_achieve)
     }
     
-    const three_weeks_ago = Date.now() - (7 * 24 * 60 * 60 * 1000)
+    const three_weeks_ago = Date.now() - (21 * 24 * 60 * 60 * 1000)
  
     if (activities.length > 0) {
       let recent_activities_list = []

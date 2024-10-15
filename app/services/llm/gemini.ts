@@ -14,7 +14,7 @@ function build_one_activity(activity: any, index: number) {
   }
   
   async function generate(prompt: string) {
-    const apiKey = "AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ"
+    const apiKey = ""
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
@@ -22,12 +22,9 @@ function build_one_activity(activity: any, index: number) {
   }
 
   export async function GenerateTraining(history: string, goals: string, injuries: string, french_grading: boolean, activities: any, preferences: string) {
-    
     let prompt = []
-      
     const today = "Today is " + new Date().toDateString()
     prompt.push(today)
-
 
     const intro = "You're a climbing coach; you should help a rock climber who's trying to improve their climbing skills."
     prompt.push(intro)

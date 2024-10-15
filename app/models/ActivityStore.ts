@@ -43,6 +43,14 @@ export const ActivityStoreModel = types
       })
       store.log.push(activity)
     },
+    addActivityFromFile(activity: any) {
+      for (const existing of store.log) {
+        if (existing.id == activity.id) {
+          return
+        }
+      }
+      store.log.push(activity)
+    }
   }))
   .views((store) => ({
     get listOfActivities() {

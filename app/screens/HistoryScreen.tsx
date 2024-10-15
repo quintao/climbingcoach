@@ -27,8 +27,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Markdown from 'react-native-markdown-display';
 import {shareAsync} from 'expo';
 import * as FileSystem from 'expo-file-system'
-import DocumentPicker from 'react-native-document-picker';
-
+import * as DocumentPicker from 'expo-document-picker';
 
 const rnrImage1 = require("../../assets/images/demo/aititude-image-1.png")
 const rnrImage2 = require("../../assets/images/demo/aititude-image-2.png")
@@ -49,7 +48,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     const [show, setShow] = React.useState(false);
     const [mode, setMode] = React.useState('date');
     const [errorMessage, setErrorMessage] = React.useState("")
-    const [showFileUpload, setShowFileUpload] = React.useState(false)
+    const [newEntriesUploaded, setNewEntriesUploaded] = React.useState(-1)
 
     // For showing the modal with the workout.
     const [detailedTraining, setDetailedTraining] = React.useState({})
@@ -146,7 +145,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
         <View style={{margin: 10}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <TouchableOpacity  style={{flexDirection: 'row', alignItems: 'center'}}
-                 onPress={()=>setExpandSettings(!expandSettings)}>
+                 onPress={()=> { setExpandSettings(!expandSettings); setNewEntriesUploaded(-1)}}>
               <Icon icon="settings" color='gray' style={{margin: 5}}/>                  
               <Text style={{color: 'gray'}}>Manage your logs</Text>
             </TouchableOpacity>
@@ -176,13 +175,35 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
             </TouchableOpacity>            
 
             <TouchableOpacity
-              onPress={async () => {setShowFileUpload(true)}}
-            >
+              onPress={async () => {
+                  const result = await DocumentPicker.getDocumentAsync(
+                    {},
+                  );
+                  if (result.assets?.length <= 0) {
+                    return;
+                  }
+                  
+                  const current_number = activityStore.log.length
+                  const content = await FileSystem.readAsStringAsync(result.assets[0].uri)
+                  const json_content = JSON.parse(content)
+                  for (const entry of json_content) {
+                    activityStore.addActivityFromFile(entry)
+                  }
+                  const new_size = activityStore.log.length
+                  if (new_size - current_number >= 0) {
+                    setNewEntriesUploaded(new_size - current_number)
+                  }
+                }}
+              >
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Icon icon="lock" color='gray' style={{margin: 5}} size={15}/>                  
                 <Text size="xxs" style={{color: 'gray'}} tx="historyScreen.uploadYourData"/>
               </View>
             </TouchableOpacity>
+
+            { newEntriesUploaded == 0 && <Text size="xxs" style={{color: 'red'}} >No entries were uploaded</Text>}
+            { newEntriesUploaded > 0 && <Text size="xxs" style={{color: 'green'}}>{newEntriesUploaded} entries uploaded</Text>}
+
 
           </View>
           }

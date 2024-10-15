@@ -27,6 +27,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Markdown from 'react-native-markdown-display';
 import {shareAsync} from 'expo';
 import * as FileSystem from 'expo-file-system'
+import DocumentPicker from 'react-native-document-picker';
 
 
 const rnrImage1 = require("../../assets/images/demo/aititude-image-1.png")
@@ -48,6 +49,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     const [show, setShow] = React.useState(false);
     const [mode, setMode] = React.useState('date');
     const [errorMessage, setErrorMessage] = React.useState("")
+    const [showFileUpload, setShowFileUpload] = React.useState(false)
 
     // For showing the modal with the workout.
     const [detailedTraining, setDetailedTraining] = React.useState({})
@@ -172,6 +174,16 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
                 <Text size="xxs" style={{color: 'gray'}} tx="historyScreen.downloadYourData"/>
               </View>
             </TouchableOpacity>            
+
+            <TouchableOpacity
+              onPress={async () => {setShowFileUpload(true)}}
+            >
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Icon icon="lock" color='gray' style={{margin: 5}} size={15}/>                  
+                <Text size="xxs" style={{color: 'gray'}} tx="historyScreen.uploadYourData"/>
+              </View>
+            </TouchableOpacity>
+
           </View>
           }
       </View>

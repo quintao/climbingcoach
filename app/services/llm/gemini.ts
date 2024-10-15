@@ -88,7 +88,7 @@ function build_one_activity(activity: any, index: number) {
     const target = `The workout should be aligned with the goal of the climber, the preferences for today's session, the CONTEXT and HISTORY of the climber, current injuries if they are mentioned, and the feedback provided by the climber for the last workouts.
 
     The workout plan should consist of the following information:
-    A section called "Goals for this session": in this section, you should explain the goals behind the training that you suggested.
+    A section called "Goals for this session": in this section, you should explain the goals behind the training that you suggested. It should be short and straight to the point.
     A section called "The workout" that lists the workout.
 
     You should not provide other information such as a "conclusion", etc. Please do not talk about the climber's history.`

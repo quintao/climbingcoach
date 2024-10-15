@@ -201,8 +201,8 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
               </View>
             </TouchableOpacity>
 
-            { newEntriesUploaded == 0 && <Text size="xxs" style={{color: 'red'}} >No entries were uploaded</Text>}
-            { newEntriesUploaded > 0 && <Text size="xxs" style={{color: 'green'}}>{newEntriesUploaded} entries uploaded</Text>}
+            { newEntriesUploaded == 0 && <Text size="xxs" style={{color: 'red', padding: 5}} tx="historyScreen.noEntriesUploaded"/>}
+            { newEntriesUploaded > 0 && <Text size="xxs" style={{color: 'green', padding: 5}}>{newEntriesUploaded} {translate("historyScreen.entriesUploaded")}</Text>}
 
 
           </View>

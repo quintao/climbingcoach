@@ -110,6 +110,8 @@ const en = {
     detailedTrainingDate: "Date",
     detailedTrainingDescription: "The description of the training",
     detailedTrainingFeedback: "Your feedback about this training",
+    noEntriesUploaded: "No entries were uploaded",
+    entriesUploaded: "entries uploaded"
   },
 
   ...demoEn,

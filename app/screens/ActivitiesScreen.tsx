@@ -49,7 +49,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           <View>
             <Markdown
               style={{
-                body: {fontSize: 14, fontFamily: "spaceGroteskLight" }
+                body: {fontSize: 14, fontFamily: "sans-serif" }
               }}
             >{activityStore.current.workout}</Markdown>
           </View>

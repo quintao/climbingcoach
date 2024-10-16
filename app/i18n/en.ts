@@ -116,6 +116,8 @@ const en = {
     continueWithDeletion: "Do you want to proceed? This cannot be undone.",
     cancel: "Cancel",
     continue: "Continue",
+    save: "Save",
+    manageYourLogs: "Manage your actitivies"
   },
 
   ...demoEn,

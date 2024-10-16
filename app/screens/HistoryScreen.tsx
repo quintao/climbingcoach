@@ -255,7 +255,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
             <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
               <Markdown
                 style={{
-                  body: {fontSize: 14, fontFamily: "spaceGroteskLight" }
+                  body: {fontSize: 14, fontFamily: "sans-serif" }
                 }}
               >{detailedTraining.workout}</Markdown>
             </View>

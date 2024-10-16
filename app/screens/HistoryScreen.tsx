@@ -94,24 +94,6 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     let data = activityStore.listOfActivities.slice()
     data.sort((a, b) => b.completion_date - a.completion_date);
 
-    // renders the button to log activities by hand.
-    const logActivityByHand = () => {
-        return (        
-          <View style={{paddingTop: 5, backgroundColor: 'transparent', margin: 5, alignItems: 'flex-end'}}>
-            <TouchableOpacity
-              onPress={async () => {
-                setShowModal(true)
-              }}
-            >
-              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <Text tx="historyScreen.logManually"/>
-                <Icon icon="menu" style={{marginLeft: 5}}/>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )
-    }
-
     async function saveFile() {
       const directory = FileSystem.cacheDirectory;
       const path = directory + "/activities.json"
@@ -162,17 +144,28 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
     // renders the button to log activities by hand.
     const manageActivityLogs = () => {
       return (        
-        <View style={{margin: 10}}>
+        <View style={{marginTop: 20}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <TouchableOpacity  style={{flexDirection: 'row', alignItems: 'center'}}
                  onPress={()=> { setExpandSettings(!expandSettings); setNewEntriesUploaded(-1)}}>
               <Icon icon="settings" color='gray' style={{margin: 5}}/>                  
-              <Text style={{color: 'gray'}}>Manage your logs</Text>
+              <Text style={{color: 'gray'}} tx="historyScreen.manageYourLogs"/>
             </TouchableOpacity>
           </View>
 
           {expandSettings &&
           <View style={{marginLeft: 10}}>
+              <TouchableOpacity
+                onPress={async () => {
+                  setShowModal(true)
+                }}
+              >
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Icon icon="menu" style={{margin: 5}} size={15}/>
+                  <Text size="xxs" style={{color: 'gray'}} tx="historyScreen.logManually"/>
+                </View>
+              </TouchableOpacity>
+
             <TouchableOpacity
               onPress={async () => confirmationButton()}
             >
@@ -356,7 +349,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
                       cleanState()
                     }}
                   >
-                  <Text style={touchableOpacityTextStyle}>Save</Text>
+                  <Text style={touchableOpacityTextStyle} tx="historyScreen.save"/>
                   </TouchableOpacity>
 
                   <TouchableOpacity style={{padding: 10, backgroundColor: '#ff7a66', borderRadius: 10, marginLeft: 10}}
@@ -364,7 +357,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
                       cleanState()
                     }}
                   >
-                    <Text style={touchableOpacityTextStyle}>Cancel</Text>
+                    <Text style={touchableOpacityTextStyle} tx="historyScreen.cancel"/>
                   </TouchableOpacity>
 
               </View>
@@ -402,7 +395,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
                 <View>
                   {data.length == 0 && <Text tx="historyScreen.emptyActivities"/>}
                 </View>
-                { logActivityByHand() }
+                { manageActivityLogs()}
               </View>
             }
             renderItem={({ item }) => (
@@ -411,9 +404,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
                 onPressFavorite={() => {setDetailedTraining(item)}}
               />
             )}
-            ListFooterComponent={
-              manageActivityLogs()
-            }
+            ListFooterComponent={<></>}
           />
 
         </Screen>

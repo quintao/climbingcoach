@@ -151,14 +151,16 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           </View>
 
           <View>
-            <Markdown
-              style={{
-                body: {fontSize: 14, fontFamily: "spaceGroteskLight" }
-              }}>
-                {trainingValue}
-            </Markdown>
             {trainingValue ? (
               <>
+            <View style={{backgroundColor: '#e8e7e6', padding: 15, borderRadius: 20}}>
+              <Markdown
+                style={{
+                  body: {fontSize: 14, fontFamily: "sans-serif" }
+                }}>
+                  {trainingValue}
+              </Markdown>
+            </View>              
               <View style={{margin: 25}}>
                 <TouchableOpacity
                   style={acceptTrainingStyle}           

@@ -30,15 +30,15 @@ import {shareAsync} from 'expo';
 import * as FileSystem from 'expo-file-system'
 import * as DocumentPicker from 'expo-document-picker';
 
-const rnrImage1 = require("../../assets/images/demo/aititude-image-1.png")
-const rnrImage2 = require("../../assets/images/demo/aititude-image-2.png")
-const rnrImage3 = require("../../assets/images/demo/aititude-image-3.png")
+const rnrImage1 = "mountain"
+const rnrImage2 = "trending"
+const rnrImage3 = "group"
 const rnrImages = [rnrImage1, rnrImage2, rnrImage3]
 
 
 export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
   function HistoryScreen(_props) {
-    const { activityStore } = useStores()
+    const { activityStore, performanceStore } = useStores()
     const [refreshing, setRefreshing] = React.useState(false)
 
     // For logging an activity manually.
@@ -134,6 +134,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
           {text: translate("historyScreen.continue"),
             onPress: () => {{
               activityStore.removeAll()
+              performanceStore.clear()
               setExpandSettings(false)
             }},
           },
@@ -252,7 +253,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
 
           <View>
             <Text style={{marginBottom: 10}} tx="historyScreen.detailedTrainingDescription"/>
-            <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
+            <View style={{backgroundColor: 'white', opacity: 0.7, borderRadius: 10, padding: 10}}>
               <Markdown
                 style={{
                   body: {fontSize: 14, fontFamily: "sans-serif" }
@@ -263,7 +264,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
 
           <View>
             <Text style={{marginVertical: 10}} tx="historyScreen.detailedTrainingFeedback"/>
-            <View style={{backgroundColor: 'white', borderRadius: 10, padding: 10}}>
+            <View style={{backgroundColor: 'white', opacity: 0.5, borderRadius: 10, padding: 10}}>
               <Text>{detailedTraining.feedback}</Text>
             </View>
           </View>
@@ -272,7 +273,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
             style={{marginVertical: 20}}
             onPress={()=> setDetailedTraining({})}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Icon icon="back" color='gray' style={{margin: 5}}/>                  
+                <Icon icon="back" color='#ebcab0' style={{margin: 5}}/>                  
                 <Text>Back</Text>
               </View>
           </TouchableOpacity>
@@ -456,7 +457,7 @@ export const HistoryScreen: FC<DemoTabScreenProps<"DemoHistory">> =
             </Text>
           </View>
         }
-        RightComponent={<Image source={imageUri} style={$itemThumbnail} />}
+        RightComponent={<Icon size={35} icon={imageUri} style={$itemThumbnail} color='#ebcab0'/>}
         FooterComponent={
           <View>
             {workout.feedback != '' ? (

@@ -1,6 +1,6 @@
 import React, { FC } from "react"
 import { TextStyle, View, ViewStyle, TextInput, TouchableOpacity } from "react-native"
-import { Screen, Text } from "../components"
+import { Screen, Text, Icon } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
 import { useStores } from "../models"
@@ -146,9 +146,12 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
               ><Text style={touchableOpacityTextStyle} tx="demoActivitiesScreen.suggestTraining"/></TouchableOpacity>
             </View>
 
-          <View>
+          {confirmationMessage && (
+            <View style={{backgroundColor: '#f0eeed', borderRadius: 10, padding: 10, flexDirection: 'column', justifyContent: 'center', alignItems:'center'}}>
+            <Icon icon="timer" color='grey' size={40} style={{marginLeft: 20, padding: 5}}/>
             <Text>{confirmationMessage}</Text>
           </View>
+          )}
 
           <View>
             {trainingValue ? (
@@ -234,7 +237,8 @@ const textInputStyle = {
 };
 
 const touchableOpacityStyle = {
-  backgroundColor: "#363E46",
+  backgroundColor: "#0097b2",
+  opacity: 0.8,
   borderRadius: 15,
   padding: 10,
   justifyContent: "center",
@@ -258,7 +262,7 @@ const touchableCancelActivityOpacityTextStyle = {
 };
 
 const acceptTrainingStyle = {
-  backgroundColor: "#ff7a66",
+  backgroundColor: "#C2737C",
   borderRadius: 15,
   padding: 10,
   justifyContent: "center",

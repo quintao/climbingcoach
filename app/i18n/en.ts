@@ -49,7 +49,7 @@ const en = {
     communityTab: "Community",
     podcastListTab: "Podcast",
     settingsTab: "About you",
-
+    progressScreen: "Home",
   },
   demoSettingsScreen: {
     title: "Let's get to know yourself",
@@ -119,7 +119,13 @@ const en = {
     save: "Save",
     manageYourLogs: "Manage your actitivies"
   },
-
+  progressScreen: {
+    title: "Your progress",
+    fillYourProfile: "You are missing information in your profile. Go the About You tab and fill it up!",
+    notEnoughActivities: "You do not have enough activities to generate a performance report.",
+    generateReport: "Generate a new report",
+    generatingAReport: "Generating ... this may take some time",
+  },
   ...demoEn,
 }
 

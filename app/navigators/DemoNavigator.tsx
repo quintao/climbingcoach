@@ -5,14 +5,16 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
-import { SettingsScreen, ActivitiesScreen, HistoryScreen } from "../screens"
+import { SettingsScreen, ActivitiesScreen, HistoryScreen, ProgressScreen } from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
 export type DemoTabParamList = {
   DemoSettings: undefined
   DemoActivities: undefined
-  DemoHistory: undefined}
+  DemoHistory: undefined,
+  DemoProgress: undefined,
+}
 
 /**
  * Helper for automatically generating navigation prop types for each route.
@@ -48,13 +50,14 @@ export function DemoNavigator() {
         tabBarItemStyle: $tabBarItem,
       }}
     >
-      <Tab.Screen
-        name="DemoSettings"
-        component={SettingsScreen}
+
+    <Tab.Screen
+        name="ProgressScreen"
+        component={ProgressScreen}
         options={{
-          tabBarLabel: translate("demoNavigator.settingsTab"),
+          tabBarLabel: translate("demoNavigator.progressScreen"),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="settings" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="menu" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
       />
@@ -81,7 +84,16 @@ export function DemoNavigator() {
         }}
       />     
 
-
+      <Tab.Screen
+        name="DemoSettings"
+        component={SettingsScreen}
+        options={{
+          tabBarLabel: translate("demoNavigator.settingsTab"),
+          tabBarIcon: ({ focused }) => (
+            <Icon icon="settings" color={focused ? colors.tint : undefined} size={30} />
+          ),
+        }}
+      />
 
     </Tab.Navigator>
   )

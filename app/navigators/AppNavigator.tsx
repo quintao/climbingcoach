@@ -40,6 +40,7 @@ export type AppStackParamList = {
   Settings: undefined
 	Activities: undefined
 	History: undefined
+	Progress: undefined
 	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -69,6 +70,7 @@ const AppStack = observer(function AppStack() {
     >
     <Stack.Screen name="Demo" component={DemoNavigator} />
      {/** 🔥 Your screens go here */}
+      <Stack.Screen name="Progress" component={Screens.ProgressScreen} />
       <Stack.Screen name="DemoSettings" component={Screens.SettingsScreen} />
 			<Stack.Screen name="DemoActivities" component={Screens.ActivitiesScreen} />
 			<Stack.Screen name="DemoHistory" component={Screens.HistoryScreen} />

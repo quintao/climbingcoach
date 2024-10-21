@@ -15,6 +15,7 @@ export const PerformanceModel = types
     other: -1,
     injuries: -1,
     expert: "",
+    boarding: -1,
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

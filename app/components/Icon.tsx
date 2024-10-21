@@ -110,6 +110,15 @@ export const iconRegistry = {
   x: require("../../assets/icons/x.png"),
   refresh: require("../../assets/icons/refresh.png"),
   attention: require("../../assets/icons/attention.png"),
+  home: require("../../assets/icons/home.png"),
+  mountain: require("../../assets/icons/mountain.png"),
+  trending: require("../../assets/icons/trending.png"),
+  timer: require("../../assets/icons/timer.png"),
+  summarize: require("../../assets/icons/summarize.png"),
+  group: require("../../assets/icons/group.png"),
+  biography: require("../../assets/icons/biography.png"),
+  target: require("../../assets/icons/target.png"),
+  medical: require("../../assets/icons/medical.png"),
 }
 
 const $imageStyleBase: ImageStyle = {

@@ -1,6 +1,6 @@
 import React, { FC } from "react"
 import { TextStyle, View, ViewStyle, TextInput, TouchableOpacity, Switch } from "react-native"
-import { Screen, Text } from "../components"
+import { Screen, Text, Icon } from "../components"
 import { DemoTabScreenProps } from "../navigators/DemoNavigator"
 import { spacing } from "../theme"
 import { useStores } from "../models"
@@ -35,8 +35,12 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
     return (
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
         <Text preset="heading" tx="demoSettingsScreen.title" style={$title} />
-        <Text tx="demoSettingsScreen.tagLine" style={$tagline} /> 
-        <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.climbingBio"/>
+        <Text tx="demoSettingsScreen.tagLine" style={$tagline} />
+
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20, marginBottom: 10}}>
+          <Icon icon="biography" color={'#0097b2'} size={25} style={{marginRight: 10}} />
+          <Text preset="subheading" tx="demoSettingsScreen.climbingBio"/>
+        </View>
         <TextInput
           multiline={true}
           numberOfLines={4}
@@ -47,7 +51,10 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           placeholderTextColor="#d6d8da"
         />
 
-      <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.climbingGoals"/>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20, marginBottom: 10}}>
+          <Icon icon="target" color={'#ebcab0'} size={25} style={{marginRight: 10}} />
+          <Text preset="subheading" tx="demoSettingsScreen.climbingGoals"/>
+        </View>
         <TextInput
           multiline={true}
           numberOfLines={4}
@@ -58,7 +65,10 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           placeholderTextColor="#d6d8da"
         />
 
-        <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.healthInformation"/>
+        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20, marginBottom: 10}}>
+          <Icon icon="medical" color={'#C2737C'} size={25} style={{marginRight: 10}} />
+          <Text preset="subheading" tx="demoSettingsScreen.healthInformation"/>
+        </View>
         <TextInput
           multiline={true}
           numberOfLines={4}
@@ -74,8 +84,8 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.usGradeSystem"/>
             <Switch
-              trackColor={{ false: "#fa7875", true: "#668cff" }}
-              thumbColor={isFrenchGrading ? "#f5dc3c" : "#5757f2"}
+              trackColor={{ false: "#0097b2", true: "#668cff" }}
+              thumbColor={isFrenchGrading ? "#ebcab0" : "#5757f2"}
               onValueChange={setFrenchGrading}
               value={isFrenchGrading}
             />
@@ -124,12 +134,11 @@ const $tagline: TextStyle = {
 
 const textInputStyle = {
   fontSize: 16,
+  textColor: 'black',
+  color: 'black',
   padding: 10,
   borderRadius: 5,
-  backgroundColor: "#FFF", // White background
-  shadowColor: "#DDD",
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.2,
+  backgroundColor: "white", // White background
   shadowRadius: 2, // Adds a subtle shadow
   marginBottom: 20,
 };

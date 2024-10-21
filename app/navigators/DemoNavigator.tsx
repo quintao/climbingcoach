@@ -57,7 +57,7 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: translate("demoNavigator.progressScreen"),
           tabBarIcon: ({ focused }) => (
-            <Icon icon="menu" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="home" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
       />
@@ -68,7 +68,7 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: "Training plan",
           tabBarIcon: ({ focused }) => (
-            <Icon icon="check" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="mountain" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
       />     
@@ -79,7 +79,7 @@ export function DemoNavigator() {
         options={{
           tabBarLabel: "Training log",
           tabBarIcon: ({ focused }) => (
-            <Icon icon="more" color={focused ? colors.tint : undefined} size={30} />
+            <Icon icon="trending" color={focused ? colors.tint : undefined} size={30} />
           ),
         }}
       />     

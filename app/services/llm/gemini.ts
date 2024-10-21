@@ -102,7 +102,6 @@ function build_one_activity(activity: any, index: number) {
     prompt.push("Please suggest a workout session for the climber to do today.")
 
     const final_prompt = prompt.join("\n")
-    console.log(final_prompt)
     const result = await generate(final_prompt);
     return result
   }
@@ -133,11 +132,14 @@ function build_one_activity(activity: any, index: number) {
   }
 
   function cleanJson(jsonString: string) {
+    try {
     // Remove the leading and trailing '```json' and '```'
-    const cleanedJson = jsonString.replace(/^```json/, '').replace(/```$/, '');
-  
-    // Parse the cleaned JSON string
-    return JSON.parse(cleanedJson);
+        const cleanedJson = jsonString.replace(/^```json/, '').replace(/```$/, '');
+      // Parse the cleaned JSON string
+      return JSON.parse(cleanedJson);
+    } catch {
+        return jsonString
+    }
   }
   
   export async function GenerateReport(activities: any, goals: string) {
@@ -148,7 +150,6 @@ function build_one_activity(activity: any, index: number) {
         data.push(a)
     }
     data.sort((a, b) => b.completion_date - a.completion_date);
-    console.log(data)
 
     const today = "Today is " + new Date().toDateString()
     prompt.push(today)
@@ -159,9 +160,9 @@ function build_one_activity(activity: any, index: number) {
     prompt.push(goals_p)
 
     prompt.push(`
-        Your task is to provide STATISTICS ANALYSIS and an EXPERT ANALYSIS of a list of workouts performed by a climber in the period of a month.
+        Your task is to provide STATISTICS ANALYSIS and an EXPERT ANALYSIS of a list of workouts performed by a climber in a period of a few months.
 
-        You will be given a list of workouts, sorted from the most recent one to the least recent one. All of them took place in the last month.
+        You will be given a list of workouts, sorted from the most recent one to the least recent one.
         The workouts consist of a "Proposed training", which lists what the climber was expected to do in that particular session,
         and a "Feedback from the climber about workout", which contains the feedback the climber provided for that particular "proposed training".
         Each workout also has an id that you will have to use in this task.
@@ -170,7 +171,7 @@ function build_one_activity(activity: any, index: number) {
         and understand the activities performed in that workout. You should count the following activities:
 
         - bouldering: list of ids of the workouts where climber performed activities that should be considered as "bouldering". Typically, boulder sessions in the french grade system contain grades which have a number and a capital letter, such as 5B, 6C, 7B. In the US grade system, these sessions contain grades wih the V scale, like V2, V5, V10.
-        - rope climbing: list of ids of the workouts where the climber performed activities that should be considered as rope climbing, including top-rope and lead climbing. In the french grade system, routes are labeled with a number and a lower letter, such as 6b, 8a, etc. In the US grade system, we use the 5 scale and routes look like 5.12, 5.11, 5.4.
+        - rope climbing: list of ids of the workouts where the climber performed activities that should be considered as rope climbing, including top-rope and lead climbing. In the french grade system, routes are labeled with a number and a lower letter, such as 6b, 8a, etc. In the US grade system, we use the 5 scale and routes look like 5.12, 5.11, 5.4. Via ferratas should NOT be included here.
         - boarding: list of ids of the workouts where the climber performed activities such as fingerboarding or campus boarding.
         - climbing-related activities: list of ids of the workouts where the climber performed activities that are not bouldering/rope climbing, but that require similar
         skills, for example: alpinism, via ferrata, mountaineering. These activities should not count for the "outdoor climbing" item below.
@@ -187,11 +188,13 @@ function build_one_activity(activity: any, index: number) {
 
         - If the climber has consistently climbed at the level they want to according to their GOALS, you should bring that into their attention,
         and instruct them to provide more ambitious goals.
-        
+
         - If you the climber consistently reported injuries or pain, you should remind them of the importance to seek health care support.
         
-        - You could comment on the climbing volume performed; if it's too much, bring awareness about over-training. If too little, remind the
-        climber that improvement comes from continuous training. In this case, you should be encouraging, never provide shame.
+        - You can comment on volume of climbing if it is relevant; if it's too much, bring awareness about over-training. If too little, remind the
+        climber that improvement comes from continuous training. In this case, you should be encouraging, never provide shame. Typically, we want climbers to do at least two sessions
+        per week to keep their fitness, and at least 3 sessions to progress with their climbing.
+        
 
         - You should provide any other insights that you learn from the data, as long as they are backed by studies that did research on sports performance.
 
@@ -218,7 +221,7 @@ function build_one_activity(activity: any, index: number) {
            "related": [888],
            "outdoor": [889],
            "other": [512, 257],
-           "injuries": 1,
+           "injuries": [538],
            "expert": "You had a busy month. You went bouldering with good regularity, and managed to push your grade from 6B+ to a consistent 7B. It is perhaps time to update your goals in bouldering since you have achieved them. You also did several other sports and managed to go climbing outdoors a few times and send one of your lead climbing projects. You kept doing some cardio exercises, which is very important for your overall endurance. It seems like your training is paying off, keep up the good job!"
          }
          
@@ -226,12 +229,12 @@ function build_one_activity(activity: any, index: number) {
 
     prompt.push()
 
-    const one_month_ago = Date.now() - (30 * 24 * 60 * 60 * 1000)
+    const three_months_ago = Date.now() - (3 * 30 * 24 * 60 * 60 * 1000)
 
     if (data.length > 0) {
         let recent_activities_list = []
         for (const activity of data) {
-            if (activity.completion_date >= one_month_ago) {
+            if (activity.completion_date >= three_months_ago) {
                 recent_activities_list.push(build_one_activity(activity, recent_activities_list.length + 1))
             }
         }      
@@ -245,7 +248,7 @@ function build_one_activity(activity: any, index: number) {
     prompt.push("Please generate the JSON object with the STATISTICS ANALYSIS and your EXPERT ANALYSIS.")
 
     const final_prompt = prompt.join("\n")
-    console.log(final_prompt)
     const result = await generate(final_prompt);
-    return cleanJson(result)
+    const js = cleanJson(result)
+    return js
   }

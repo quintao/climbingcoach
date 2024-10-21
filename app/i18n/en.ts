@@ -120,9 +120,9 @@ const en = {
     manageYourLogs: "Manage your actitivies"
   },
   progressScreen: {
-    title: "Your last 4 weeks",
-    fillYourProfile: "You have not filled your profile yet. Go the About You tab and fill it up!",
-    notEnoughActivities: "You need at least 5 activities in the last month to generate a performance report",
+    title: "Your progress",
+    fillYourProfile: "You are missing information in your profile. Go the About You tab and fill it up!",
+    notEnoughActivities: "You do not have enough activities to generate a performance report.",
     generateReport: "Generate a new report",
     generatingAReport: "Generating ... this may take some time",
   },

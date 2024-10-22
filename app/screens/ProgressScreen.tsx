@@ -121,7 +121,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
                 <View>
                   <View style={$injuriesBox}>
                     <Icon icon="attention" size={25} style={{margin: 5}}/>
-                    <Text preset="subheading" style={$injuriesLabel}>Be careful</Text>
+                    <Text preset="subheading" style={$injuriesLabel}>Watch out</Text>
                   </View>
                   <Text style={$injuriesSubLabel}>You reported injuries or complained about pain {injury_frequency} recently.</Text>
                 </View>

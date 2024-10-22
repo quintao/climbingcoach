@@ -119,6 +119,9 @@ export const iconRegistry = {
   biography: require("../../assets/icons/biography.png"),
   target: require("../../assets/icons/target.png"),
   medical: require("../../assets/icons/medical.png"),
+  score: require("../../assets/icons/score.png"),
+  scale: require("../../assets/icons/scale.png"),
+
 }
 
 const $imageStyleBase: ImageStyle = {

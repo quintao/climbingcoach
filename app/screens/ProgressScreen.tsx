@@ -97,7 +97,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
   const maybeRenderReport = () => {
     // No report generated.
     // color to save: f5decb
-    const injury_frequency = performanceStore.report.injuries == 1 ? "once" : performanceStore.report.injuries + "times"
+    const injury_frequency = performanceStore.report.injuries == 1 ? "once" : performanceStore.report.injuries + " times"
     const totals = compute_totals();
 
     return (
@@ -150,11 +150,15 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
     await performanceStore.clear()
     setGenerateMessage(translate("progressScreen.generatingAReport"))
     const report = await GenerateReport(activityStore.listOfActivities, userBioStore.bio.goals)
-    const update = {
-      "expert": report
+
+    if (report.expert != '') {
+      const update = {
+        "expert": report.expert,
+        "injuries": report.injuries
+      }
+      const combined_update = {...update}
+      await performanceStore.update(combined_update)
     }
-    const combined_update = {...update}
-    await performanceStore.update(combined_update)
     setGenerateMessage("")
     forceUpdate()
   }

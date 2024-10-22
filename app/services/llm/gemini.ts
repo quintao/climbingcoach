@@ -164,7 +164,6 @@ function build_one_activity(activity: any, index: number) {
         You will be given a list of workouts, sorted from the most recent one to the least recent one.
         The workouts consist of a "Proposed training", which lists what the climber was expected to do in that particular session,
         and a "Feedback from the climber about workout", which contains the feedback the climber provided for that particular "proposed training".
-        Each workout also has an id that you will have to use in this task.
 
         For the EXPERT ANALYSIS, you should review the workouts and their "proposed training" and "feedback from the climber" data and
         generate an expert-level summary with approximately 100 words containing interesting insights that you learned from the data. The summary should be
@@ -182,12 +181,19 @@ function build_one_activity(activity: any, index: number) {
         climber that improvement comes from continuous training. In this case, you should be encouraging, never provide shame. Typically, we want climbers to do at least two sessions
         per week to keep their fitness, and at least 3 sessions to progress with their climbing.
         
-
         - You should provide any other insights that you learn from the data, as long as they are backed by studies that did research on sports performance.
 
         - If you noticed a progress in the last month, you should congratulate the climber for the hard work.
 
         You should refer to the climber as "you", not as "the climber", since your analysis will be shared with the climber.
+
+        For the injuries analysis, you should review the most recent feedback from the climber and count how often the climber mentioned being injured or feeling pain.
+
+        You should return a JSON file that has the following fields:
+        {
+          "expert": your expert analysis go here,
+          "injuries": how many injuries you found in the most recent feedback from the climber.
+        }
        `)
 
     prompt.push()
@@ -208,11 +214,12 @@ function build_one_activity(activity: any, index: number) {
       }  
     }
     
-    prompt.push("Please generate your EXPERT ANALYSIS.")
+    prompt.push("Please generate your the JSON with your EXPERT ANALYSIS and the injuries analysis.")
 
     const final_prompt = prompt.join("\n")
     const result = await generate(final_prompt);
-    return result
+    const js = cleanJson(result)
+    return js
   }
 
   export async function ClassifyWorkout(workout: any, feedback: string) {

@@ -6,7 +6,7 @@ export const ActivityStoreModel = types
   .model("ActivityStore")
   .props({
     log: types.array(ActivityModel),
-    current: types.optional(ActivityModel, {id: -1})
+    current: types.optional(ActivityModel, {id: -1, sports: []})
   })
   .actions(withSetPropAction)
   .actions((store) => ({
@@ -15,6 +15,7 @@ export const ActivityStoreModel = types
         workout: workout,
         creation_date: Date.now(),
         id: Date.now(),
+        sports: []
       })
       store.current = {...activity};
     },

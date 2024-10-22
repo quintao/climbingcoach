@@ -12,6 +12,7 @@ export const ActivityModel = types
     completion_date: 0,
     workout: "",
     feedback: "",
+    sports: types.array(types.string, [])
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

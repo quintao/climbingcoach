@@ -73,6 +73,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
                   handleConfirmationMessageChange(translate("demoActivitiesScreen.provideMeaningfulFeedback"))                
                   return;
                 }
+
                 activityStore.completeActivity(feedbackValue)
                 handleFeedbackChange('')
                 handleConfirmationMessageChange('')

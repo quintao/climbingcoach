@@ -14,7 +14,7 @@ export const ActivityStoreModel = types
       const activity = ActivityModel.create({
         workout: workout,
         creation_date: Date.now(),
-        id: Date.now()
+        id: Date.now(),
       })
       store.current = {...activity};
     },
@@ -50,7 +50,7 @@ export const ActivityStoreModel = types
         }
       }
       store.log.push(activity)
-    }
+    },
   }))
   .views((store) => ({
     get listOfActivities() {

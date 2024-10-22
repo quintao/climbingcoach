@@ -103,7 +103,6 @@ function build_one_activity(activity: any, index: number) {
 
     const final_prompt = prompt.join("\n")
     const result = await generate(final_prompt);
-    console.log(result)
     return result
   }
 
@@ -255,3 +254,167 @@ function build_one_activity(activity: any, index: number) {
     const js = cleanJson(result)
     return js
   }
+
+  export async function ClassifyWorkout(workout: any, feedback: string) {
+    let prompt = []
+    prompt.push("Today is " + new Date().toDateString())
+
+    prompt.push(`You are a sports analyst, focused on analysing the performance of climbing athletes.
+You are analysing the last workout of a climber; your task is to determine which sport activities were performed during the workout.
+
+Each workout contains a few fields, as described below:
+
+- proposed training: this is what the coach suggested as the workout. It's a plain text that lists the sport activities to be performed during the workout.
+- feedback from the climber: this is a a plain text field that contains the feedback provided by the climber about the proposed training, as well as observations about was done, what was not done, and how the climber felt after the training.
+- id: the ID of the workout.
+
+Your task is to read the workout AND the feedback from the climber and understand which sport activities were performed during the workout. One workout can include multiple sport activities. The activities we care about are listed below:
+
+
+       - BOULDERING: this is a climbing activity that consists of climbing walls that are not so high; it can be performed indoors or outdoors. Typically, boulder sessions in the french grade system contain grades which have a number and a capital letter, such as 5B, 6C, 7B. In the US grade system, these sessions contain grades with the V scale, like V2, V5, V10.
+       - ROPE CLIMBING: this includes activities that should be considered as rope climbing, including top-rope and lead climbing. In the french grade system, routes are labeled with a number and a lower letter, such as 6b, 8a, etc. In the US grade system, we use the 5 scale and routes look like 5.12, 5.11, 5.4. Via ferratas should NOT be included here.
+       - FINGER STRENGTH: this includes activities such as fingerboarding or campus boarding.
+       - CLIMBING RELATED ACTIVITIES:  activities where the climber performed activities that are not bouldering/rope climbing, but that require similar skills, for example: alpinism, via ferrata, mountaineering.
+       - OUTDOOR CLIMBING:  activities where the climber went outdoors for "BOULDERING" OR "ROPE CLIMBING". Typically these activities will mention that the climber went to a crag or a cliff or did a climb with multiple pitches. If you are not sure if the workout happened indoor or outdoor, you should assume it is indoor.
+       - OTHER SPORTS: other sports, such as fitness training, running, cycling, rolling, core strength, etc.
+    
+        You should return an object in JSON, that has the following keys: 
+         {
+           id: ID of the workout that was provided in the input.
+           activities: list of activities that were performed in the input.
+           reason:  your explanation as to why those activities were performed.
+         }
+
+     Follow the examples below for an input and you should generate:
+
+
+Input:
+Workout #1, completed on  Sun Oct 20 2024
+Workout ID: 1729414990223
+Proposed training: ## Goals for this session:
+
+* Maintain cardiovascular fitness through a fun activity.
+* Build endurance for multi-pitch climbing by simulating the sustained effort required on longer routes.
+
+## The workout:
+
+* **Warm-up:** 10 minutes of light spinning on the stationary bike, focusing on building up a moderate heart rate.
+* **Road Cycling:** Choose a scenic route with some gentle hills to challenge your endurance. Aim for a ride of 1-2 hours at a comfortable pace, maintaining a steady breathing rhythm throughout. 
+* **Cool-down:** After your ride, take 5 minutes to stretch your legs and back, focusing on any muscles that feel tight or fatigued. 
+
+Feedback from the climber about workout #1: "30.4km in 1h43, 700m of elevation gain.
+
+I didn't push much, heart rate max of 159, average of 113."#####
+ 
+Output:
+{
+   id: 1729414990223
+   activities: ["OTHER SPORTS"],
+   reason:  "The climber went cycling, so the activity should be tagged with OTHER SPORTS.
+ }
+
+Input:
+Workout #2, completed on  Sat Oct 19 2024
+Workout ID: 1729344761333
+Proposed training: Went for a 5km run with my friend Yohann. Very chill, pace 6:17km/h, we talked during the run etc.
+Feedback from the climber about workout #2: "Felt good, this was an easy run just to move a bit after bouldering in the morning".
+
+Output:
+{
+   id: 1729344761333
+   activities: ["OTHER SPORTS"],
+   reason:  "The climber went running, so the activity should be tagged as OTHER SPORTS. It's also known that the climber went bouldering in the morning, but this activity is not part of the current workout.
+ }
+
+Input:
+Workout #3, completed on  Sat Oct 19 2024
+Workout ID: 1729337232604
+Proposed training: 20 minutes bouldering session at Yohann's place, in his home climbing wall.
+Around 5 easy boulders in the 5B-6A range.
+Feedback from the climber about workout #3: "I feel sore from yesterday. One finger in my right hand is not 100%, a bit painful."
+
+Output:
+{
+   id: 1729337232604
+   activities: ["BOULDERING"],
+   reason:  "The climber states that they went bouldering at his friend's place",
+}
+
+
+Input:
+Workout #4, completed on  Fri Oct 18 2024
+Workout ID: 1729268557470
+Proposed training: ## Goals for this session:
+
+* Work on technical aspects of climbing to improve movement efficiency and confidence on harder routes.
+* Gain experience attempting 7A/B problems with a focus on technique and learning from each attempt.
+
+## The workout:
+
+* **Warm-up:** 10 minutes of light cardio, followed by dynamic stretching focusing on shoulders, back, and hips.
+* **Bouldering:**
+   *  ** Climbing: ** Select one easy 6a route to lead climb as warm up.
+    * **Technical Focus:** Select 3-4 new problems in the 6A-6B range that challenge your technique and require precise footwork, body positioning, and efficient movement.
+    * **7A/B Attempt:**  Choose 1-2 7A/B problems that you find interesting. Focus on climbing with good technique and trying different beta options. Don't worry about sending, the goal is to learn and feel confident on these grades. 
+    * **Problem Analysis:**  After each attempt, take a break and analyze your movements, identify areas for improvement, and brainstorm different beta options. 
+* **Cool-down:** 10 minutes of static stretching, focusing on muscles worked during the session. 
+
+Feedback from the climber about workout #4: "Warm up good!
+6A-B range: focused on technique.
+
+For the 7A-B range:
+Went for a 7B I have been working on. Tried one first beta and didn't go well. In the second attempt, sent it with a new beta! So it's 7B baby :)
+
+I had some energy left so I did:
+- one easy 6C twice, to explore different betas.
+- one hard 6C, perhaps 6C+, that I had not done yet.
+
+Very very good session!"
+
+Output:
+{
+   id: 1729268557470
+   activities: ["CLIMBING, BOULDERING"],
+   reason:  "The proposed plan suggested CLIMBING and BOULDERING, and the climber said that everything went well, so the climber achieved to perform both activities",
+}
+
+Input:
+
+Workout #5, completed on  Wed Oct 16 2024
+Workout ID: 1729089225791
+Proposed training: ## Goals for this session:
+
+* Maintain finger strength and endurance with a low-impact session.
+* Focus on specific hold types to build strength and technique for various climbing styles.
+
+## The workout:
+
+* **Warm-up:** 5 minutes of light cardio, followed by 5 minutes of dynamic stretching focusing on shoulders, back, and hips.
+* **Fingerboard:**
+    *  **1 set of 10 seconds on each hold, followed by 10 seconds rest:** Repeat for 3 sets on each hold type:
+        * **Jugs:** Focus on maintaining good form and tension, engaging the lats and core. 
+        * **Crimps:**  Use a slightly easier crimp to focus on proper technique and avoid overloading the tendons. 
+        * **Pockets:**  Use a moderate-sized pocket, focusing on developing strength and dexterity.
+*** Bouldering: three boulders up to 6B+
+* **Cool-down:** 5 minutes of static stretching, focusing on forearms, fingers, and wrists. 
+
+Feedback from the climber about workout #5: "I did the fingerboarding session but I was too tired to do the boulder session so I skipped it"
+
+
+Output:
+{
+   id: 1729089225791
+   activities: ["FINGER STRENGTH"],
+   reason:  "The proposed plan suggested FINGER STRENGTH and the some BOULDERING, however the climber said he was too tired to do the bouldering, so the workout should be tagged only with FINGER STRENGTH",
+}
+
+Please provide the output object for the following input:
+"`)
+  const activity = build_one_activity(workout, 1)
+  prompt.push(activity)
+  prompt.push("Feedback from the climber about workout #1: " + feedback)
+  const final_prompt = prompt.join("\n")
+  const result = await generate(final_prompt);
+  const js = cleanJson(result)
+  return js
+}

@@ -80,20 +80,23 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
         />
 
         <View>
-          <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.gradeSystem"/>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.usGradeSystem"/>
+          <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20, marginBottom: 10}}>
+            <Icon icon="medical" color={'#0097b2'} size={25} style={{marginRight: 10}} />
+            <Text preset="subheading" tx="demoSettingsScreen.gradeSystem"/>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#edebeb', borderRadius: 10, padding: 10 }}>
+            <Text tx="demoSettingsScreen.usGradeSystem"/>
             <Switch
               trackColor={{ false: "#0097b2", true: "#668cff" }}
               thumbColor={isFrenchGrading ? "#ebcab0" : "#5757f2"}
               onValueChange={setFrenchGrading}
               value={isFrenchGrading}
             />
-            <Text style={{marginTop: 20, marginBottom: 10}} tx="demoSettingsScreen.frenchGradeSystem"/>
+            <Text tx="demoSettingsScreen.frenchGradeSystem"/>
           </View>                 
         </View>
 
-      <View style={{margin: 10}}>
+      <View style={{margin: 20}}>
         <TouchableOpacity
           style={touchableOpacityStyle}
           onPress={() => {

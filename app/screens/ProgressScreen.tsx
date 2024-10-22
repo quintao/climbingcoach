@@ -7,11 +7,6 @@ import { spacing } from "../theme"
 import { useStores } from "../models"
 import { translate } from "../i18n"
 import { GenerateReport } from "../services/llm";
-import { ImageBackground } from "react-native/types"
-
-
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "app/models"
 
 interface ProgressScreenProps extends AppStackScreenProps<"Progress"> {}
 
@@ -22,19 +17,19 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
 
   const [, forceUpdate] = React.useReducer(x => x + 1, 0)
 
-  const MIN_ACTIVITIES = 3
+  const MIN_ACTIVITIES = 1
 
-  function activities_last_three_months() {
+  function activities_last_N_months(months: number) {
     const ONE_DAY_IN_MILIS = 24 * 60 * 60 * 1000
     const ONE_MONTH_IN_MILIS = ONE_DAY_IN_MILIS * 30
-    const THREE_MONTH_IN_MILIS = 3 * ONE_MONTH_IN_MILIS
+    const CUTOFF = months * ONE_MONTH_IN_MILIS
 
-    const one_month_ago = Date.now() - THREE_MONTH_IN_MILIS
+    const cutoff_ago = Date.now() - CUTOFF
 
     let count = 0
 
     for (const act of activityStore.listOfActivities) {
-      if (act.completion_date > one_month_ago) {
+      if (act.completion_date > cutoff_ago) {
         count += 1
       }
     }
@@ -42,7 +37,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
   }
 
   function has_enough_activities() {
-    return activities_last_three_months() >= MIN_ACTIVITIES
+    return activities_last_N_months(3) >= MIN_ACTIVITIES
   }
 
   const maybeRenderNoActivities = () => {
@@ -68,7 +63,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
     )
   }
 
-  const renderBox = (color: string, opacity: number, metric: number, category: string, ) => {
+  const renderBox = (color: string, opacity: number, metric: number, category: string) => {
   return(
     <View style={{...$box, backgroundColor: color, opacity: opacity}}>
       <Text preset="bold" style={$metricText}>{metric}</Text>
@@ -76,6 +71,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
     </View>
     )   
   }
+
 
   const maybeRenderReport = () => {
     if (!has_enough_activities()) {
@@ -88,6 +84,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
 
     const when = new Date(performanceStore.report.when)
     // color to save: f5decb
+    const injury_frequency = performanceStore.report.injuries == 1 ? "once" : performanceStore.report.injuries + "times"
 
     return (
       <View>
@@ -96,15 +93,15 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
             <Text style={$updatedLabel}>Report generated at {when.toLocaleString()}</Text>
           </View>
 
-          <Text preset="subheading" style={$reportTitle}>A summary of your sessions:</Text>
+          <View style={$scoreBoardContainer}>
+            <Icon icon="score" size={25} color='#ebcab0' style={{margin: 5}}/>
+            <Text preset="subheading" style={$reportTitle}>Your activities</Text>
+          </View>
           
           <View style={$reportContainer}>
-            {performanceStore.report.bouldering > 0 && (renderBox("#0097b2", 1.0, performanceStore.report.bouldering, "boulder"))}
-            {performanceStore.report.rope > 0 && (renderBox("#0097b2", 0.7, performanceStore.report.rope, "rope climbing"))}
-            {performanceStore.report.boarding > 0 && (renderBox("#0097b2", 0.6, performanceStore.report.boarding, "finger"))}
-            {performanceStore.report.outdoor > 0 && (renderBox("#0097b2", 0.5, performanceStore.report.outdoor, "outdoor climbing"))}
-            {performanceStore.report.related > 0 && (renderBox("#0097b2", 0.4, performanceStore.report.rope, "related sports"))}
-            {performanceStore.report.other > 0 && (renderBox("#ebcab0", 1.0, performanceStore.report.other, "other sports"))}
+            {performanceStore.report.one_month > 0 && (renderBox("#0097b2", 0.9, performanceStore.report.one_month, "last 30 days"))}
+            {performanceStore.report.three_month > 0 && (renderBox("#0097b2", 0.6, performanceStore.report.three_month, "last 3 months"))}
+            {performanceStore.report.ever > 0 && (renderBox("#0097b2", 0.5, performanceStore.report.ever, "total"))}
           </View>
         </View>
 
@@ -115,7 +112,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
                 <Icon icon="attention" size={25} style={{margin: 5}}/>
                 <Text preset="subheading" style={$injuriesLabel}>Be careful</Text>
               </View>
-              <Text style={$injuriesSubLabel}>You reported injuries or complained about pain {performanceStore.report.injuries} times in the last month.</Text>
+              <Text style={$injuriesSubLabel}>You reported injuries or complained about pain {injury_frequency} recently.</Text>
             </View>
 
           )}
@@ -134,6 +131,15 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
     )
   }
 
+  function compute_totals() {
+    let totals = {
+      "ever": activityStore.listOfActivities.length,
+      "three_month": activities_last_N_months(3),
+      "one_month": activities_last_N_months(1)
+    }
+    return totals
+  }
+
   async function generateAndProcessReport() {
     await performanceStore.clear()
     setGenerateMessage(translate("progressScreen.generatingAReport"))
@@ -148,7 +154,9 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
       "boarding": report.boarding?.length,
       "expert": report.expert
     }
-    await performanceStore.update(update)
+    const totals = compute_totals()
+    const combined_update = {...update, ...totals}
+    await performanceStore.update(combined_update)
     setGenerateMessage("")
     forceUpdate()
   }
@@ -215,7 +223,6 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
   }
 
 
-  // { generateMessage && <Text style={$generateMessageText}>{generateMessage}</Text>}
   return (
     <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
       <View style={$titleView}>
@@ -269,6 +276,11 @@ const $errorsContainer: ViewStyle = {
   margin: 10,
 }
 
+const $scoreBoardContainer: ViewStyle = {
+  flexDirection: 'row',
+  marginVertical: 10,
+}
+
 const $reportContainer: ViewStyle = {
   padding: 20,
   flexDirection: 'row',
@@ -279,7 +291,6 @@ const $reportContainer: ViewStyle = {
 
 const $reportTitle = {
   marginLeft: 5,
-  marginVertical: 10,
 }
 
 const $wheUpdated: ViewStyle = {
@@ -306,22 +317,22 @@ const $box = {
   aspectRatio: 1, // Keep boxes square
   alignItems: 'center',
   justifyContent: 'flex-start',
-  flexWrap: 'wrap',
+  flexDirection: 'column',
   margin: 5,
   borderRadius: 20,
-  padding: 20,
+  padding: 10,
 };
 
 const $boxText = {
-  fontSize: 12,
-  padding: 5,
+  fontSize: 10,
+  padding: 3,
   color: 'black',
-
+  textTransform: 'uppercase'
 };
 
 const $metricText = {
   fontSize: 20,
-  color: '#38383b'
+  fontWeight: 700,
 };
 
 const $injuriesContainer: ViewStyle = {

@@ -48,6 +48,19 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
         </View>
       )
     }
+
+    if (generateMessage != '') {
+      return (<></>)
+    }
+
+    if (performanceStore.report.when < 0) {
+      return (
+        <View style={$expertContainer}>
+          <Text style={$expertText}>
+            Use the refresh button to generate your report.
+          </Text>
+        </View>)
+    }
     return(<></>)
   }
   
@@ -72,72 +85,65 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
     )   
   }
 
+  function compute_totals() {
+    let totals = {
+      "ever": Math.max(0, activityStore.listOfActivities.length),
+      "three_month": Math.max(0, activities_last_N_months(3)),
+      "one_month": Math.max(0, activities_last_N_months(1))
+    }
+    return totals
+  }
 
   const maybeRenderReport = () => {
-    if (!has_enough_activities()) {
-    // Not enough data.
-     return (<></>)
-    }
-    
     // No report generated.
-    if (performanceStore.report.when < 0) { return (<></>)}
-
-    const when = new Date(performanceStore.report.when)
     // color to save: f5decb
     const injury_frequency = performanceStore.report.injuries == 1 ? "once" : performanceStore.report.injuries + "times"
+    const totals = compute_totals();
 
     return (
       <View>
         <View>
-          <View style={$wheUpdated}>
-            <Text style={$updatedLabel}>Report generated at {when.toLocaleString()}</Text>
-          </View>
-
           <View style={$scoreBoardContainer}>
             <Icon icon="score" size={25} color='#ebcab0' style={{margin: 5}}/>
             <Text preset="subheading" style={$reportTitle}>Your activities</Text>
           </View>
           
           <View style={$reportContainer}>
-            {performanceStore.report.one_month > 0 && (renderBox("#0097b2", 0.9, performanceStore.report.one_month, "last 30 days"))}
-            {performanceStore.report.three_month > 0 && (renderBox("#0097b2", 0.6, performanceStore.report.three_month, "last 3 months"))}
-            {performanceStore.report.ever > 0 && (renderBox("#0097b2", 0.5, performanceStore.report.ever, "total"))}
+            {renderBox("#0097b2", 0.9, Math.max(0, totals.one_month), "last 30 days")}
+            {renderBox("#0097b2", 0.6, Math.max(totals.three_month, 0), "last 3 months")}
+            {renderBox("#0097b2", 0.5, Math.max(totals.ever, 0), "total")}
           </View>
         </View>
 
-        <View style={$injuriesContainer}>
-          {performanceStore.report.injuries > 0 && (
-            <View>
-              <View style={$injuriesBox}>
-                <Icon icon="attention" size={25} style={{margin: 5}}/>
-                <Text preset="subheading" style={$injuriesLabel}>Be careful</Text>
-              </View>
-              <Text style={$injuriesSubLabel}>You reported injuries or complained about pain {injury_frequency} recently.</Text>
+        <View>
+            <View style={$injuriesContainer}>
+              {performanceStore.report.injuries > 0 && (
+                <View>
+                  <View style={$injuriesBox}>
+                    <Icon icon="attention" size={25} style={{margin: 5}}/>
+                    <Text preset="subheading" style={$injuriesLabel}>Be careful</Text>
+                  </View>
+                  <Text style={$injuriesSubLabel}>You reported injuries or complained about pain {injury_frequency} recently.</Text>
+                </View>
+
+              )}
             </View>
 
-          )}
-        </View>
-
-        <View style={$expertAnalyisTitlecontianer}>
-          <Icon icon="summarize" color='#0097b2' size={25} style={{margin: 5}}/>
-          <Text preset="subheading" style={$expertTitle}>Expert analysis</Text>
-        </View>
-        <View style={$expertContainer}>
-          <Text style={$expertText}>
-            {performanceStore.report.expert}
-          </Text>
-        </View>        
+            <View style={$expertAnalyisTitlecontianer}>
+              <Icon icon="summarize" color='#0097b2' size={25} style={{margin: 5}}/>
+              <Text preset="subheading" style={$expertTitle}>Expert analysis</Text>
+              { maybeRenderRefresh() }
+            </View>
+            { performanceStore.report.when > 0 && (
+              <View style={$expertContainer}>
+                <Text style={$expertText}>
+                  {performanceStore.report.expert}
+                </Text>
+              </View>)}
+              { maybeRenderNoActivities() }              
+          </View>
       </View>
     )
-  }
-
-  function compute_totals() {
-    let totals = {
-      "ever": activityStore.listOfActivities.length,
-      "three_month": activities_last_N_months(3),
-      "one_month": activities_last_N_months(1)
-    }
-    return totals
   }
 
   async function generateAndProcessReport() {
@@ -145,61 +151,16 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
     setGenerateMessage(translate("progressScreen.generatingAReport"))
     const report = await GenerateReport(activityStore.listOfActivities, userBioStore.bio.goals)
     const update = {
-      "bouldering": report.bouldering?.length,
-      "rope": report.rope?.length,
-      "related": report.related?.length,
-      "outdoor": report.outdoor?.length,
-      "other": report.other?.length,
-      "injuries": report.injuries?.length,
-      "boarding": report.boarding?.length,
-      "expert": report.expert
+      "expert": report
     }
-    const totals = compute_totals()
-    const combined_update = {...update, ...totals}
+    const combined_update = {...update}
     await performanceStore.update(combined_update)
     setGenerateMessage("")
     forceUpdate()
   }
 
-  const maybeRenderGenerateYourReport = () => {
+   const maybeRenderRefresh = () => {
     if (!has_enough_activities()) {
-      return (<></>)
-    }
-
-    if (performanceStore.report.when > 0) {
-      return (<></>)
-    }
-    return (
-      <View>
-        <TouchableOpacity
-          style={$refreshStyle}
-          onPress={async () => {
-
-            if (generateMessage != '') {
-              return
-            }
-            await generateAndProcessReport()
-
-          }}
-        >
-
-          {generateMessage == '' && (
-            <View style={$generateYourReportView}>
-              <Text style={$generateYourReportText}>Generate your first report</Text>
-            </View>
-          )}
-        </TouchableOpacity>    
-
-      </View>
-    )
-  }
-
-  const maybeRenderRefresh = () => {
-    if (!has_enough_activities()) {
-      return (<></>)
-    }
-
-    if (performanceStore.report?.when <= 0) {
       return (<></>)
     }
 
@@ -215,7 +176,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
             await generateAndProcessReport()
           }}
         >
-          <Icon icon="refresh" color='grey' size={30} style={{marginLeft: 20, padding: 5}}/>
+          <Icon icon="refresh" color='grey' size={30}/>
         </TouchableOpacity>    
 
       </View>
@@ -227,11 +188,11 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
     <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
       <View style={$titleView}>
         <Text preset="heading" style={$title} tx="progressScreen.title"/>
-        { maybeRenderRefresh() }
       </View>
 
       { maybeRenderInviteToFillProfile() }
-      { maybeRenderNoActivities() }
+
+      { maybeRenderReport() } 
 
       { generateMessage && <View style={$generateMessageView}>
           <Icon icon="timer" color='grey' size={40} style={{marginLeft: 20, padding: 5}}/>
@@ -239,10 +200,6 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
           <Text style={$generateMessageText}>This may take some time</Text>
         </View>
       }
-
-      { maybeRenderReport() } 
-      { maybeRenderGenerateYourReport() } 
-
 
     </Screen>
   )
@@ -305,11 +262,10 @@ const $updatedLabel = {
 
 const $refreshStyle = {
   borderRadius: 15,
-  padding: 10,
+  marginLeft: 10,
   flexDirection: 'row',
   justifyContent: "center",
   alignItems: "center",
-  shadowRadius: 2,
 };
 
 const $box = {

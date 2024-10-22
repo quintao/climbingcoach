@@ -159,26 +159,12 @@ function build_one_activity(activity: any, index: number) {
     const goals_p = "You are analysing the last workouts of a climber whose GOALS in climbing are, in their own words: " + goals
     prompt.push(goals_p)
 
-    prompt.push(`Your task is to provide STATISTICS ANALYSIS and an EXPERT ANALYSIS of a list of workouts performed by a climber in a period of a few months.
+    prompt.push(`Your task is to provide an EXPERT ANALYSIS of a list of workouts performed by a climber in a period .
 
         You will be given a list of workouts, sorted from the most recent one to the least recent one.
         The workouts consist of a "Proposed training", which lists what the climber was expected to do in that particular session,
         and a "Feedback from the climber about workout", which contains the feedback the climber provided for that particular "proposed training".
         Each workout also has an id that you will have to use in this task.
-
-        For the STATISTICS ANALYSIS, you should review the "proposed training" and the "feedback from the climber" for each workout,
-        and understand the activities performed in that workout. You should collect the following statistics:
-
-        - bouldering: list of unique ids of the workouts where climber performed activities that should be considered as "bouldering". Typically, boulder sessions in the french grade system contain grades which have a number and a capital letter, such as 5B, 6C, 7B. In the US grade system, these sessions contain grades with the V scale, like V2, V5, V10.
-        - rope climbing: list of unique ids of the workouts where the climber performed activities that should be considered as rope climbing, including top-rope and lead climbing. In the french grade system, routes are labeled with a number and a lower letter, such as 6b, 8a, etc. In the US grade system, we use the 5 scale and routes look like 5.12, 5.11, 5.4. Via ferratas should NOT be included here.
-        - boarding: list of unique ids of the workouts where the climber performed activities such as fingerboarding or campus boarding.
-        - climbing-related activities: list of ids of the workouts where the climber performed activities that are not bouldering/rope climbing, but that require similar
-        skills, for example: alpinism, via ferrata, mountaineering. These activities should not count for the "outdoor climbing" item below.
-        - outdoor climbing: list of ids of the workouts where the climber went outdoors for "bouldering" OR "rope climbing". If you are not sure if the workout happened indoor or outdoor, you should assume it is indoor.
-        - other sports: list of unique ids of the workouts where the climber performed other sports, such as fitness training, running, cycling, rolling, core strength, etc.
-        - injuries: how many times the climber reported being injured, having pain or not feeling well in the "feedback from the climber" entries.
-        
-        You should NOT count how many times the climber performed each activity, but the UNIQUE IDs of the workouts were the activities were performed.
 
         For the EXPERT ANALYSIS, you should review the workouts and their "proposed training" and "feedback from the climber" data and
         generate an expert-level summary with approximately 100 words containing interesting insights that you learned from the data. The summary should be
@@ -201,41 +187,17 @@ function build_one_activity(activity: any, index: number) {
 
         - If you noticed a progress in the last month, you should congratulate the climber for the hard work.
 
-        You should return an object in JSON, that has the following keys: 
-         {
-           "bouldering": the list of unique ids you found for "bouldering" in the STATISTICS ANALYSIS,
-           "rope": the list of unique ids you found for "rope climbing" in the STATISTICS ANALYSIS,
-           "boarding": the list of unique ids you found for "boarding" (fingerboard, campus board) in the STATISTICS ANALYSIS,
-           "related": the list of unique ids you found for "climbing-related activities" from the STATISTICS ANALYSIS,
-           "outdoor": the list of unique ids you found for "outdoor climbing" in the STATISTICS ANALYSIS,
-           "other": the list of unique ids you found for "other sports" in the STATISTICS ANALYSIS,
-           "injuries": the list of unique ids you found for "injuries" in the STATISTICS ANALYSIS,
-           "expert": the text with your EXPPERT ANALYSIS summary goes here.
-         }
-
-         This is an EXAMPLE of a valid JSON object to be returned:
-
-         {
-           "bouldering": [123, 456],
-           "rope": [123, 457],
-           "boarding": [444, 555],
-           "related": [888],
-           "outdoor": [889],
-           "other": [512, 257],
-           "injuries": [538],
-           "expert": "You had a busy month. You went bouldering with good regularity, and managed to push your grade from 6B+ to a consistent 7B. It is perhaps time to update your goals in bouldering since you have achieved them. You also did several other sports and managed to go climbing outdoors a few times and send one of your lead climbing projects. You kept doing some cardio exercises, which is very important for your overall endurance. It seems like your training is paying off, keep up the good job!"
-         }
-         
-        `)
+        You should refer to the climber as "you", not as "the climber", since your analysis will be shared with the climber.
+       `)
 
     prompt.push()
 
-    const three_months_ago = Date.now() - (3 * 30 * 24 * 60 * 60 * 1000)
+    const one_month_ago = Date.now() - (30 * 24 * 60 * 60 * 1000)
 
     if (data.length > 0) {
         let recent_activities_list = []
         for (const activity of data) {
-            if (activity.completion_date >= three_months_ago) {
+            if (activity.completion_date >= one_month_ago) {
                 recent_activities_list.push(build_one_activity(activity, recent_activities_list.length + 1))
             }
         }      
@@ -246,13 +208,11 @@ function build_one_activity(activity: any, index: number) {
       }  
     }
     
-    prompt.push("Please generate the JSON object with the STATISTICS ANALYSIS and your EXPERT ANALYSIS.")
+    prompt.push("Please generate your EXPERT ANALYSIS.")
 
     const final_prompt = prompt.join("\n")
-    console.log(final_prompt)
     const result = await generate(final_prompt);
-    const js = cleanJson(result)
-    return js
+    return result
   }
 
   export async function ClassifyWorkout(workout: any, feedback: string) {

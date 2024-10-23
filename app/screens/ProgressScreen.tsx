@@ -116,20 +116,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
         </View>
 
         <View>
-            <View style={$injuriesContainer}>
-              {performanceStore.report.injuries > 0 && (
-                <View>
-                  <View style={$injuriesBox}>
-                    <Icon icon="attention" size={25} style={{margin: 5}}/>
-                    <Text preset="subheading" style={$injuriesLabel}>Watch out</Text>
-                  </View>
-                  <Text style={$injuriesSubLabel}>You reported injuries or complained about pain {injury_frequency} recently.</Text>
-                </View>
-
-              )}
-            </View>
-
-            <View style={$expertAnalyisTitlecontianer}>
+          <View style={$expertAnalyisTitlecontianer}>
               <Icon icon="summarize" color='#0097b2' size={25} style={{margin: 5}}/>
               <Text preset="subheading" style={$expertTitle}>Expert analysis</Text>
               { maybeRenderRefresh() }
@@ -142,6 +129,19 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
               </View>)}
               { maybeRenderNoActivities() }              
           </View>
+
+          <View style={$injuriesContainer}>
+              {performanceStore.report.injuries > 0 && (
+                <View>
+                  <View style={$injuriesBox}>
+                    <Icon icon="attention" size={25} style={{margin: 5}}/>
+                    <Text preset="subheading" style={$injuriesLabel}>Watch out</Text>
+                  </View>
+                  <Text style={$injuriesSubLabel}>You reported injuries or complained about pain {injury_frequency} recently.</Text>
+                </View>
+
+              )}
+            </View>          
       </View>
     )
   }
@@ -296,7 +296,7 @@ const $metricText = {
 };
 
 const $injuriesContainer: ViewStyle = {
-  marginVertical: 20,
+  marginVertical: 10,
   padding: 5,
   flexDirection: 'row',
   justifyContent: 'flex-start',
@@ -310,7 +310,7 @@ const $injuriesBox: ViewStyle = {
 
 const $injuriesLabel = {
 
-}
+};
 
 const $injuriesSubLabel = {
  fontSize: 13,

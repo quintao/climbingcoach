@@ -81,7 +81,7 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
 
         <View>
           <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20, marginBottom: 10}}>
-            <Icon icon="medical" color={'#0097b2'} size={25} style={{marginRight: 10}} />
+            <Icon icon="scale" color={'#0097b2'} size={25} style={{marginRight: 10}} />
             <Text preset="subheading" tx="demoSettingsScreen.gradeSystem"/>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#edebeb', borderRadius: 10, padding: 10 }}>

@@ -86,30 +86,10 @@ export function Icon(props: IconProps) {
 }
 
 export const iconRegistry = {
-  back: require("../../assets/icons/back.png"),
-  bell: require("../../assets/icons/bell.png"),
-  caretLeft: require("../../assets/icons/caretLeft.png"),
-  caretRight: require("../../assets/icons/caretRight.png"),
-  check: require("../../assets/icons/check.png"),
-  clap: require("../../assets/icons/demo/clap.png"),
-  community: require("../../assets/icons/demo/community.png"),
-  components: require("../../assets/icons/demo/components.png"),
-  debug: require("../../assets/icons/demo/debug.png"),
-  github: require("../../assets/icons/demo/github.png"),
-  heart: require("../../assets/icons/demo/heart.png"),
-  hidden: require("../../assets/icons/hidden.png"),
-  ladybug: require("../../assets/icons/ladybug.png"),
-  lock: require("../../assets/icons/lock.png"),
-  menu: require("../../assets/icons/menu.png"),
-  more: require("../../assets/icons/more.png"),
-  pin: require("../../assets/icons/demo/pin.png"),
-  podcast: require("../../assets/icons/demo/podcast.png"),
-  settings: require("../../assets/icons/settings.png"),
-  slack: require("../../assets/icons/demo/slack.png"),
-  view: require("../../assets/icons/view.png"),
-  x: require("../../assets/icons/x.png"),
-  refresh: require("../../assets/icons/refresh.png"),
   attention: require("../../assets/icons/attention.png"),
+  back: require("../../assets/icons/back.png"),
+  settings: require("../../assets/icons/settings.png"),
+  refresh: require("../../assets/icons/refresh.png"),
   home: require("../../assets/icons/home.png"),
   mountain: require("../../assets/icons/mountain.png"),
   trending: require("../../assets/icons/trending.png"),
@@ -121,7 +101,6 @@ export const iconRegistry = {
   medical: require("../../assets/icons/medical.png"),
   score: require("../../assets/icons/score.png"),
   scale: require("../../assets/icons/scale.png"),
-
 }
 
 const $imageStyleBase: ImageStyle = {

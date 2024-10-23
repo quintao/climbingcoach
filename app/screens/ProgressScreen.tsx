@@ -169,7 +169,7 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
     }
 
     return (
-      <View>
+      <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
         <TouchableOpacity
           style={$refreshStyle}
           onPress={async () => {
@@ -216,7 +216,7 @@ const $container: ViewStyle = {
 
 const $titleView: ViewStyle = {
   flexDirection: 'row',
-  justityContent: 'space-around',
+  justifyContent: 'flex-start',
   alignItems: 'center'
 }
 
@@ -254,16 +254,6 @@ const $reportTitle = {
   marginLeft: 5,
 }
 
-const $wheUpdated: ViewStyle = {
-  margin: 10
-
-}
-
-const $updatedLabel = {
-  fontSize: 13,
-  color: 'grey'
- };
-
 const $refreshStyle = {
   borderRadius: 15,
   marginLeft: 10,
@@ -296,8 +286,8 @@ const $metricText = {
 };
 
 const $injuriesContainer: ViewStyle = {
-  marginVertical: 10,
-  padding: 5,
+  marginVertical: 15,
+  padding: 0,
   flexDirection: 'row',
   justifyContent: 'flex-start',
 }
@@ -326,14 +316,14 @@ const $expertContainer: ViewStyle = {
   justifyContent: 'space-around',
   backgroundColor: '#f0eeed',
   borderRadius: 10,
-  marginBottom: 20,
+  marginTop: 10,
 }
 
 const $expertAnalyisTitlecontianer: ViewStyle = {
   flexDirection: 'row',
   justifyContent: 'flex-start',
   alignContent: 'center',
-  marginBottom: 10,
+  marginTop: 25,
 }
 
 const $expertTitle = {
@@ -365,20 +355,5 @@ const $generateMessageTitle = {
   fontSize: 15,
   color: '#C2737C',
   padding: 10,
-  fontWeight: 'bold',
-}
-
-const $generateYourReportView = {
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: '#C2737C',
-  padding: 10,
-  borderRadius: 10,
-}
-
-const $generateYourReportText = {
-  color: 'white',
-  fontSize: 18,
-  padding: 20
+  fontWeight: 700,
 }

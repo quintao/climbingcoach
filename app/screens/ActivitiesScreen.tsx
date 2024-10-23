@@ -237,8 +237,8 @@ const textInputStyle = {
   marginBottom: 20,
 };
 
-const touchableOpacityStyle = {
-  backgroundColor: "#0097b2",
+const touchableOpacityStyle = {  
+  backgroundColor: "#C2737C",
   opacity: 0.8,
   borderRadius: 15,
   padding: 10,
@@ -263,7 +263,7 @@ const touchableCancelActivityOpacityTextStyle = {
 };
 
 const acceptTrainingStyle = {
-  backgroundColor: "#C2737C",
+  backgroundColor: "#0097b2",
   borderRadius: 15,
   padding: 10,
   justifyContent: "center",
@@ -275,7 +275,7 @@ const acceptTrainingStyle = {
 };
 
 const markAsCompletedStyle = {
-  backgroundColor: "#76a388",
+  backgroundColor: "#0097b2",
   borderRadius: 15,
   padding: 10,
   justifyContent: "center",

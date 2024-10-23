@@ -169,7 +169,7 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
                 <TouchableOpacity
                   style={acceptTrainingStyle}           
                   onPress={async () => {
-                    activityStore.acceptActivity(trainingValue)
+                    await activityStore.acceptActivity(trainingValue)
                     setTraining('')
                   }}            
                 >

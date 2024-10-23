@@ -14,7 +14,7 @@ export const ActivityStoreModel = types
       const activity = ActivityModel.create({
         workout: workout,
         creation_date: Date.now(),
-        id: Date.now(),
+        id: Date.now()
       })
       store.current = {...activity};
     },

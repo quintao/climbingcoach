@@ -15,7 +15,7 @@ function build_one_activity(activity: any, index: number) {
   }
   
   async function generate(prompt: string) {
-    const apiKey = "AIzaSyCUGuL9nhMQ18wdFWhb943TM3Jjeee9BuQ"
+    const apiKey = ""
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
@@ -135,12 +135,9 @@ function build_one_activity(activity: any, index: number) {
     try {
     // Remove the leading and trailing '```json' and '```'
         const cleanedJson = jsonString.replace(/^```json/, '').replace(/```/, '');
-        console.log(cleanedJson)
-
       // Parse the cleaned JSON string
       return JSON.parse(cleanedJson);
     } catch (error){
-        console.log(error)
         return jsonString
     }
   }

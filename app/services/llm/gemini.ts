@@ -134,10 +134,10 @@ function build_one_activity(activity: any, index: number) {
   function cleanJson(jsonString: string) {
     try {
     // Remove the leading and trailing '```json' and '```'
-        const cleanedJson = jsonString.replace(/^```json/, '').replace(/```$/, '');
+        const cleanedJson = jsonString.replace(/^```json/, '').replace(/```/, '');
       // Parse the cleaned JSON string
       return JSON.parse(cleanedJson);
-    } catch {
+    } catch (error){
         return jsonString
     }
   }
@@ -219,6 +219,8 @@ function build_one_activity(activity: any, index: number) {
     const final_prompt = prompt.join("\n")
     const result = await generate(final_prompt);
     const js = cleanJson(result)
+    console.log(js)
+
     return js
   }
 

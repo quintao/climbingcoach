@@ -58,7 +58,7 @@
       },
       "bundler": "metro"
     },
-    "plugins": [
+    "plugins": [  
       "expo-localization",
       [
         "expo-build-properties",

@@ -19,7 +19,7 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
     ...config,
     plugins: [
       ...existingPlugins,
-      require("./plugins/withSplashScreen").withSplashScreen,
+      //require("./plugins/withSplashScreen").withSplashScreen,
     ],
   }
 }

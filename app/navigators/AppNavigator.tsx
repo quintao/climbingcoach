@@ -65,7 +65,7 @@ const AppStack = observer(function AppStack() {
 
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
+      screenOptions={{ headerShown: false }}
       initialRouteName={"Demo"}
     >
     <Stack.Screen name="Demo" component={DemoNavigator} />

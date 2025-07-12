@@ -67,7 +67,7 @@ export const colors = {
   /**
    * The main tinting color.
    */
-  tint: palette.primary500,
+  tint: "#53a5ad",
   /**
    * A subtle color used for lines.
    */

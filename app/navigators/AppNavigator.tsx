@@ -70,7 +70,7 @@ const AppStack = observer(function AppStack() {
   }
 
 
-  if (userBioStore.bioInfo.goals == "") {
+  if (userBioStore.bioInfo.goals.trim() == "" || userBioStore.bioInfo.goals.trim().length <= 0) {
     return (<Stack.Navigator
           screenOptions={{ headerShown: false }}>
         <Stack.Screen name="DemoSetGoals" component={Screens.SetGoalsScreen} />

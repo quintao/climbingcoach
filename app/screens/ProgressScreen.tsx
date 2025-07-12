@@ -109,9 +109,9 @@ export const ProgressScreen: FC<ProgressScreenProps> = observer(function Progres
           </View>
           
           <View style={$reportContainer}>
-            {renderBox("#0097b2", 0.9, Math.max(0, totals.one_month), "last 30 days")}
-            {renderBox("#0097b2", 0.6, Math.max(totals.three_month, 0), "last 3 months")}
-            {renderBox("#0097b2", 0.5, Math.max(totals.ever, 0), "total")}
+            {renderBox("#53a5ad", 0.9, Math.max(0, totals.one_month), "last 30 days")}
+            {renderBox("#53a5ad", 0.6, Math.max(totals.three_month, 0), "last 3 months")}
+            {renderBox("#53a5ad", 0.5, Math.max(totals.ever, 0), "total")}
           </View>
         </View>
 
@@ -233,7 +233,7 @@ const $errorMessage: TextStyle = {
 const $errorsContainer: ViewStyle = {
   padding: 10,
   borderRadius: 10,
-  backgroundColor: '#C2737C',
+  backgroundColor: '#f5b482',
   margin: 10,
 }
 
@@ -275,7 +275,7 @@ const $box = {
 
 const $boxText = {
   fontSize: 10,
-  padding: 3,
+  padding: 2,
   color: 'black',
   textTransform: 'uppercase'
 };

@@ -146,7 +146,7 @@ const textInputStyle = {
 };
 
 const touchableOpacityStyle = {
-  backgroundColor: "#363E46", // Primary color
+  backgroundColor: "#53a5ad", // Primary color
   borderRadius: 15,
   padding: 10,
   justifyContent: "center",

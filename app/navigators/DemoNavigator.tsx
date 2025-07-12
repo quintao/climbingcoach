@@ -69,7 +69,7 @@ export function DemoNavigator() {
         name="DemoActivities"
         component={ActivitiesScreen}
         options={{
-          tabBarLabel: "Training plan",
+          tabBarLabel: "Generate training",
           tabBarIcon: ({ focused }) => (
             <Icon icon="mountain" color={focused ? colors.tint : undefined} size={30} />
           ),

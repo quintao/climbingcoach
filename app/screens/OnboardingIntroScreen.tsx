@@ -73,5 +73,4 @@ const $image = {
     width: 200, // Set your desired width
     height: 200, // Set your desired height
     resizeMode: 'contain', // Or 'cover', 'stretch', etc.
-    
 }

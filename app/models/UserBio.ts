@@ -11,6 +11,7 @@ export const UserBioModel = types
     goals: "",
     injuries: "",
     french_grading: true,
+    onboarding_started: false,
   })
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

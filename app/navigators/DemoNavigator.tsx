@@ -5,7 +5,7 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "../i18n"
-import { SettingsScreen, ActivitiesScreen, HistoryScreen, ProgressScreen } from "../screens"
+import { SettingsScreen, ActivitiesScreen, HistoryScreen, ProgressScreen, SetGoalsScreen, SetHistoryScreen } from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
@@ -14,6 +14,9 @@ export type DemoTabParamList = {
   DemoActivities: undefined
   DemoHistory: undefined,
   DemoProgress: undefined,
+  DemoSetGoals: undefined,
+  DemoSetHistory: undefined,
+  DemoOnboardingIntro: undefined,
 }
 
 /**

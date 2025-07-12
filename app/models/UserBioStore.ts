@@ -21,10 +21,14 @@ export const UserBioStoreModel = types
     setUseFrenchSystem(value: boolean) {
       store.bio.french_grading = value
     },
+    setOnboardingStarted(value: boolean) {
+      store.bio.onboarding_started = value
+    },
     clearBio() {
         this.setHistory('')
         this.setGoals('')
         this.setInjuries('')
+        this.setOnboardingStarted(false)
     },
   }))
   .views((store) => ({

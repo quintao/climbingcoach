@@ -113,9 +113,8 @@ export const SettingsScreen: FC<DemoTabScreenProps<"DemoSettings">> =
           }}
         ><Text style={touchableOpacityTextStyle}>Save</Text></TouchableOpacity>
       </View>
-
       <View>
-        <Text>{confirmationMessage}</Text>
+        <Text >{confirmationMessage}</Text>
       </View>
 
       </Screen>

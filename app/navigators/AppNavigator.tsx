@@ -19,7 +19,6 @@ import Config from "../config"
 import { useStores } from "../models"
 import { DemoNavigator, DemoTabParamList } from "./DemoNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
-import { colors } from "..//theme"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -40,7 +39,9 @@ export type AppStackParamList = {
   Settings: undefined
 	Activities: undefined
 	History: undefined
-	Progress: undefined
+	Progress: undefined,
+  SetGoals: undefined,
+  SetHistory: undefined,
 	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -59,23 +60,46 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
-  const {
-    authenticationStore: { isAuthenticated },
-  } = useStores()
+  const { userBioStore } = useStores()
+
+  if (userBioStore.bioInfo.onboarding_started == false) {
+    return (<Stack.Navigator
+          screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="DemoOnboadingIntro" component={Screens.OnboardingIntroScreen} />
+    </Stack.Navigator>)
+  }
+
+
+  if (userBioStore.bioInfo.goals == "") {
+    return (<Stack.Navigator
+          screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="DemoSetGoals" component={Screens.SetGoalsScreen} />
+    </Stack.Navigator>)
+  }
+
+  console.log(userBioStore.bioInfo.history.length)
+
+  if (userBioStore.bioInfo.history.trim() == "" || userBioStore.bioInfo.history.trim().length <= 0) {
+    return (<Stack.Navigator
+          screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="DemoSetHistory" component={Screens.SetHistoryScreen} />
+    </Stack.Navigator>)
+  }  
+
 
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={"Demo"}
+      initialRouteName="Demo"
     >
-    <Stack.Screen name="Demo" component={DemoNavigator} />
-     {/** 🔥 Your screens go here */}
+
+      <Stack.Screen name="Demo" component={DemoNavigator} />
       <Stack.Screen name="Progress" component={Screens.ProgressScreen} />
       <Stack.Screen name="DemoSettings" component={Screens.SettingsScreen} />
-			<Stack.Screen name="DemoActivities" component={Screens.ActivitiesScreen} />
-			<Stack.Screen name="DemoHistory" component={Screens.HistoryScreen} />
-			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
-    </Stack.Navigator>
+      <Stack.Screen name="DemoActivities" component={Screens.ActivitiesScreen} />
+      <Stack.Screen name="DemoHistory" component={Screens.HistoryScreen} />
+
+      </Stack.Navigator>
   )
 })
 

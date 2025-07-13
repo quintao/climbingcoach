@@ -8,54 +8,59 @@ import { translate } from "../i18n"
 
 const spinningImage = require("../../assets/images/adaptive-icon.png");
 
-
-const texts = [
-    "Personalizing for you ...",
-    "Generating insights based on your climbing history ...",
-    "Thinking about your next training ..."
-]
-
 function SpinningImageComponent() {
   // Create an animated value
-  const spinValue = useRef(new Animated.Value(0)).current;
+  const pulseValue = useRef(new Animated.Value(0)).current;
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+    useEffect(() => {
+        // Define the animation sequence for pulsing
+        Animated.loop(
+        Animated.sequence([
+            // Animate from 0 to 1 (normal to slightly larger)
+            Animated.timing(
+            pulseValue,
+            {
+                toValue: 1,
+                duration: 500, // Duration for scaling up
+                easing: Easing.ease, // Smooth easing for the pulse
+                useNativeDriver: true,
+            }
+            ),
+            // Animate back from 1 to 0 (slightly larger back to normal)
+            Animated.timing(
+            pulseValue,
+            {
+                toValue: 0,
+                duration: 500, // Duration for scaling down
+                easing: Easing.ease, // Smooth easing for the pulse
+                useNativeDriver: true,
+            }
+            ),
+        ])
+        ).start(); // Start the animation loop
 
-  useEffect(() => {
-    // Configure the animation
-    Animated.loop(
-      Animated.timing(
-        spinValue,
-        {
-          toValue: 1, // Animate from 0 to 1
-          duration: 3000, // Duration of one full rotation (in milliseconds)
-          easing: Easing.linear, // Linear easing for a smooth, constant spin
-          useNativeDriver: true, // Use native driver for better performance
-        }
-      )
-    ).start(); // Start the animation loop
-    
-
-    // Cleanup function (optional, but good practice if component unmounts)
+    // Cleanup function
     return () => {
-      spinValue.stopAnimation(); // Stop the animation if the component unmounts
+      pulseValue.stopAnimation(); // Stop the animation if the component unmounts
     };
   }, []); // Empty dependency array means this effect runs once on mount
 
 
-  // Map the animated value (0 to 1) to a rotation string ('0deg' to '360deg')
-  const spin = spinValue.interpolate({
+
+    // Map the animated value (0 to 1) to a scale value (1.0 to 1.1)
+const scale = pulseValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
+    outputRange: [1.0, 1.1], // Scale from normal size (1.0) to 10% larger (1.1)
   });
 
   return (
     <View style={{backgroundColor: 'white', alignContent: 'center', justifyContent: 'center', flexDirection: 'column'}}>
       <Animated.Image
-        style={[$image, { transform: [{ rotate: spin }] }]} // Apply the rotation
+        style={[$image, { transform: [{ scale: scale }]  }]}
         source={spinningImage}
       />
-    <Text style={{textTransform: 'uppercase'}}>{texts[currentIndex]}</Text>      
+      <Text style={{alignSelf: 'center', textTransform: 'uppercase', color: "#f5b482", fontWeight: 'bold', fontSize: 20}}>Personalizing</Text>
+      <Text style={{alignSelf: 'center', textTransform: 'uppercase', color: "#53a5ad", fontSize: 14}}>your experience</Text>      
     </View>
   );
 }
@@ -78,7 +83,10 @@ export const SetHistoryScreen: FC<DemoTabScreenProps<"DemoSetHistory">> =
 
      if (showSpin) {
         return (
-            <Screen preset="fixed" style={{backgroundColor: 'white'}} contentContainerStyle={{paddingTop: 100, alignItems: 'center', justifyContent: 'center'}} safeAreaEdges={["top"]}>
+            <Screen preset="fixed"
+                style={{backgroundColor: 'white'}}
+                contentContainerStyle={{paddingTop: 100, alignItems: 'center', justifyContent: 'center'}}
+                safeAreaEdges={["top"]}>
                 <SpinningImageComponent/>
             </Screen>
         )
@@ -114,12 +122,10 @@ export const SetHistoryScreen: FC<DemoTabScreenProps<"DemoSetHistory">> =
                 return               
             }
             setShowSpin(true);                
-
-            // Clear the message after 2 seconds
             setTimeout(() => {
                 setShowSpin(false)
-                // userBioStore.setHistory(trimmedValue)
-            }, 8000);
+                userBioStore.setHistory(trimmedValue)
+            }, 6000);
           }}
         ><Text style={touchableOpacityTextStyle}>Save</Text></TouchableOpacity>
       </View>
@@ -137,7 +143,7 @@ const $container: ViewStyle = {
 }
 
 const $title: TextStyle = {
-  marginBottom: spacing.sm,
+  marginBottom: spacing.xxl,
 }
 
 const $tagline: TextStyle = {
@@ -174,7 +180,7 @@ const touchableOpacityTextStyle = {
 };
 
 const $image = {
-    width: 200, // Set your desired width
-    height: 200, // Set your desired height
-    resizeMode: 'contain', // Or 'cover', 'stretch', etc.
+    width: 400, // Set your desired width
+    height: 400, // Set your desired height
+    resizeMode: 'cover', // Or 'cover', 'stretch', etc.
 }

@@ -110,15 +110,16 @@ export const ActivitiesScreen: FC<DemoTabScreenProps<"DemoActivities">> =
           <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
             <Text preset="heading" style={$title} tx="demoActivitiesScreen.title" />
 
-            <Text style={{marginTop: 20, marginBottom: 10}} tx="demoActivitiesScreen.preferences" />
+            <Text style={{marginTop: 20, marginBottom: 20}} tx="demoActivitiesScreen.preferences" />
             <TextInput
               multiline={true}
-              numberOfLines={4}
+              numberOfLines={7}
               onChangeText={handlePreferencesChange}
               value={preferencesValue}
               style={textInputStyle}
               placeholder={translate("demoActivitiesScreen.preferencesPlaceholder")}
               placeholderTextColor="#d6d8da"
+              textAlignVertical="top"
             />
 
             <View style={{margin: 10}}>
@@ -235,6 +236,7 @@ const textInputStyle = {
   shadowOpacity: 0.2,
   shadowRadius: 2, // Adds a subtle shadow
   marginBottom: 20,
+  minHeight: 120,  
 };
 
 const touchableOpacityStyle = {  

@@ -77,8 +77,6 @@ const AppStack = observer(function AppStack() {
     </Stack.Navigator>)
   }
 
-  console.log(userBioStore.bioInfo.history.length)
-
   if (userBioStore.bioInfo.history.trim() == "" || userBioStore.bioInfo.history.trim().length <= 0) {
     return (<Stack.Navigator
           screenOptions={{ headerShown: false }}>

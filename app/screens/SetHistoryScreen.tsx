@@ -6,6 +6,62 @@ import { spacing } from "../theme"
 import { useStores } from "../models"
 import { translate } from "../i18n"
 
+
+const AnimatedTextScroller = ({ stringList, duration }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Start with opacity 0 for the first fade-in
+
+  useEffect(() => {
+    if (!stringList || stringList.length === 0) return;
+
+    const totalStrings = stringList.length;
+    const intervalDuration = duration / totalStrings; // Time each string is displayed for
+
+    // Initial fade-in for the first string
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: intervalDuration * 1000 * 0.2, // Faster initial fade-in
+      useNativeDriver: true,
+    }).start();
+
+    const interval = setInterval(() => {
+      // Fade out current text
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: intervalDuration * 1000 * 0.25, // 25% of the string's display time for fade-out
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }).start(() => {
+        // Update to the next string after fade-out completes
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalStrings);
+
+        // Fade in new text
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: intervalDuration * 1000 * 0.25, // 25% of the string's display time for fade-in
+          easing: Easing.ease,
+          useNativeDriver: true,
+        }).start();
+      });
+    }, intervalDuration * 1000); // Total interval for each string
+
+    // Cleanup function for the interval
+    return () => {
+      clearInterval(interval);
+      fadeAnim.stopAnimation(); // Stop any ongoing animation
+    };
+  }, [stringList, duration, fadeAnim]); // Re-run if stringList or duration changes
+
+  return (
+    <View style={$textContainer}>
+      <Animated.Text style={[$animatedText, { opacity: fadeAnim }]}>
+        {stringList[currentIndex]}
+      </Animated.Text>
+    </View>
+  );
+};
+
+
 const spinningImage = require("../../assets/images/adaptive-icon.png");
 
 function SpinningImageComponent() {
@@ -59,9 +115,7 @@ const scale = pulseValue.interpolate({
         style={[$image, { transform: [{ scale: scale }]  }]}
         source={spinningImage}
       />
-      <Text style={{alignSelf: 'center', textTransform: 'uppercase', color: "#f5b482", fontWeight: 'bold', fontSize: 20}}>Personalizing</Text>
-      <Text style={{alignSelf: 'center', textTransform: 'uppercase', color: "#53a5ad", fontSize: 14}}>your experience</Text>      
-    </View>
+      </View>
   );
 }
 
@@ -81,6 +135,13 @@ export const SetHistoryScreen: FC<DemoTabScreenProps<"DemoSetHistory">> =
 
      const [confirmationMessage, setConfirmationMessage] = React.useState('');
 
+    const strings_to_showcase = [
+      'Understanding\nyour goals',
+      'Checking\nyour climbing history',
+      'Personalizing\nthe next training session',
+      ''];
+    const totalDurationInSeconds = 8;     
+
      if (showSpin) {
         return (
             <Screen preset="fixed"
@@ -88,20 +149,35 @@ export const SetHistoryScreen: FC<DemoTabScreenProps<"DemoSetHistory">> =
                 contentContainerStyle={{paddingTop: 100, alignItems: 'center', justifyContent: 'center'}}
                 safeAreaEdges={["top"]}>
                 <SpinningImageComponent/>
+                <AnimatedTextScroller
+                  stringList={strings_to_showcase}
+                  duration={totalDurationInSeconds}
+                />
             </Screen>
         )
     }
 
     return (
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
-        <Text preset="heading" style={$title}>What is your history with climbing?</Text>
-        <Text style={$tagline}>Are you a beginner? Since when?</Text>
-        <Text style={$tagline}>Have you been climbing for many years? Tell us what you have achieved so far!</Text>
+        <Text preset="heading" style={$title}>What is your climbing history?</Text>
+       
+       <View style={{flexDirection: 'row'}}>
+        <Icon icon="biography" color={'#0097b2'} size={25} style={{marginRight: 10}} />
+        <Text style={$tagline}>When did you start climbing?</Text>
+       </View>
 
-        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20, marginBottom: 10}}>
-          <Icon icon="biography" color={'#0097b2'} size={25} style={{marginRight: 10}} />
-          <Text preset="subheading" tx="demoSettingsScreen.climbingBio"/>
-        </View>
+       <View style={{flexDirection: 'row'}}>
+         <Icon icon="biography" color={'#0097b2'} size={25} style={{marginRight: 10}} />
+         <Text style={$tagline}>How regularly have you been climbing?</Text>
+       </View>
+
+       <View style={{flexDirection: 'row', marginBottom: 20}}>
+         <Icon icon="biography" color={'#0097b2'} size={25} style={{marginRight: 10}} />
+         <Text style={$tagline}>Which grade have you reached?</Text>
+       </View>       
+
+        <Text style={$tagline}>Tell us about your climbing and AI'titude will personalize your trainings.</Text>
+
         <TextInput
           multiline={true}
           numberOfLines={4}
@@ -125,12 +201,12 @@ export const SetHistoryScreen: FC<DemoTabScreenProps<"DemoSetHistory">> =
             setTimeout(() => {
                 setShowSpin(false)
                 userBioStore.setHistory(trimmedValue)
-            }, 6000);
+            }, 8000);
           }}
         ><Text style={touchableOpacityTextStyle}>Save</Text></TouchableOpacity>
       </View>
       <View>
-        <Text>{confirmationMessage}</Text>
+        <Text style={{textAlign: 'center'}}>{confirmationMessage}</Text>
       </View>
 
       </Screen>
@@ -184,3 +260,17 @@ const $image = {
     height: 400, // Set your desired height
     resizeMode: 'cover', // Or 'cover', 'stretch', etc.
 }
+
+const $textContainer = {
+    height: 50, // Give it a fixed height to prevent layout shifts during animation
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden', // Hide overflow if text briefly gets larger during animation
+}
+
+const $animatedText = {
+    fontSize: 17,
+    color: '#333',
+    textAlign: 'center',
+    textTransform: 'uppercase'
+  }

@@ -263,8 +263,8 @@ const $refreshStyle = {
 };
 
 const $box = {
-  width: '30%', // Adjust width as needed
-  aspectRatio: 1, // Keep boxes square
+  width: '30%',
+  aspectRatio: 1,
   alignItems: 'center',
   justifyContent: 'flex-start',
   flexDirection: 'column',
@@ -277,7 +277,8 @@ const $boxText = {
   fontSize: 10,
   padding: 2,
   color: 'black',
-  textTransform: 'uppercase'
+  textTransform: 'uppercase',
+  textAlign: 'center'
 };
 
 const $metricText = {

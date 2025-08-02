@@ -18,9 +18,8 @@ export const OnboardingIntroScreen: FC<DemoTabScreenProps<"DemoOnboardingIntro">
 
         <Image source={require("../../assets/images/adaptive-icon.png")} style={$image}></Image>
 
-        <Text style={$tagline}>In the next screens we will ask you some questions to personalize your experience.</Text>
 
-        <Text style={$tagline}>It will take no more than 2 minutes of your time. We promise!</Text>
+        <Text style={$tagline}>Personalize your experience in less than two minutes.</Text>
 
 
       <View style={{margin: 20}}>
@@ -49,6 +48,7 @@ const $title: TextStyle = {
 
 const $tagline: TextStyle = {
   marginBottom: spacing.xxl,
+  textAlign: 'center'
 }
 
 const touchableOpacityStyle = {

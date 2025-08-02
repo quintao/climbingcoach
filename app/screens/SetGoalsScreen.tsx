@@ -24,15 +24,20 @@ export const SetGoalsScreen: FC<DemoTabScreenProps<"DemoSetGoals">> =
     return (
       <Screen preset="scroll" contentContainerStyle={$container} safeAreaEdges={["top"]}>
         <Text preset="heading" style={$title}>What are your climbing goals?</Text>
-        <Text style={$tagline}>Do you want to climb a specific grade? When do you to achieve that?</Text>
-        <Text style={$tagline}>Or perhaps you just want to keep your climbing fitness?</Text>
-        <Text style={$tagline}>Just tell me what you want to achieve with AI'titude and we will personalize it for you.</Text>
-
-
-        <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20, marginBottom: 10}}>
+        <View style={{flexDirection: 'row', marginTop: 25}}>
           <Icon icon="target" color={'#ebcab0'} size={25} style={{marginRight: 10}} />
-          <Text preset="subheading" tx="demoSettingsScreen.climbingGoals"/>
+          <Text style={$tagline}>A specific grade?</Text>
         </View>
+        <View style={{flexDirection: 'row'}}>
+          <Icon icon="target" color={'#ebcab0'} size={25} style={{marginRight: 10}} />          
+          <Text style={$tagline}>Send that dream project?</Text>
+        </View>
+        <View style={{flexDirection: 'row', marginBottom: 20}}>
+          <Icon icon="target" color={'#ebcab0'} size={25} style={{marginRight: 10}} />          
+          <Text style={$tagline}>Keep your climbing fitness?</Text>
+        </View>
+        <Text style={$tagline}>Tell us any goal and AI'titude will be personalized for you.</Text>
+
         <TextInput
           multiline={true}
           numberOfLines={10}
@@ -66,7 +71,7 @@ export const SetGoalsScreen: FC<DemoTabScreenProps<"DemoSetGoals">> =
         ><Text style={touchableOpacityTextStyle}>Next</Text></TouchableOpacity>
       </View>
       <View>
-        <Text>{confirmationMessage}</Text>
+        <Text style={{textAlign: 'center'}}>{confirmationMessage}</Text>
       </View>
 
       </Screen>

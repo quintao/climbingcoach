@@ -17,7 +17,7 @@ function build_one_activity(activity: any, index: number) {
   async function generate(prompt: string) {
     const apiKey = ""
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const result = await model.generateContent(prompt);
     return result.response.text(); 
   }
